@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { resetSessionPuzzles } from '../services/gameService';
 
 // Create context
 const GameContext = createContext();
@@ -127,6 +128,9 @@ export const GameProvider = ({ children }) => {
 
   // Reset game
   const resetGame = () => {
+    // Reset the puzzle tracking in gameService
+    resetSessionPuzzles();
+    
     setGameState({
       ...initialState,
       playerName: gameState.playerName,

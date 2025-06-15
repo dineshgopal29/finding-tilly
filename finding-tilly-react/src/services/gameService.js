@@ -1,107 +1,402 @@
-// Enhanced gameService.js with difficulty levels and bonus questions
+// Enhanced gameService.js with improved randomness and more puzzles
 
-// Puzzle libraries by difficulty level
-const puzzleLibrary = {
-  // Explorer level (Ages 3-4) - Easiest puzzles
-  explorer: {
-    alphabet: [
-      { type: 'alphabet', difficulty: 'explorer', question: "What letter comes after A?", answer: "B", options: ["B", "C", "D"] },
-      { type: 'alphabet', difficulty: 'explorer', question: "What letter comes before C?", answer: "B", options: ["A", "B", "D"] },
-      { type: 'alphabet', difficulty: 'explorer', question: "What letter is missing? A, _, C", answer: "B", options: ["B", "D", "E"] },
-      { type: 'alphabet', difficulty: 'explorer', question: "What letter comes after D?", answer: "E", options: ["C", "E", "F"] },
-      { type: 'alphabet', difficulty: 'explorer', question: "What letter comes before F?", answer: "E", options: ["D", "E", "G"] }
-    ],
-    numbers: [
-      { type: 'numbers', difficulty: 'explorer', question: "What number comes after 1?", answer: "2", options: ["2", "3", "4"] },
-      { type: 'numbers', difficulty: 'explorer', question: "What number comes before 3?", answer: "2", options: ["1", "2", "4"] },
-      { type: 'numbers', difficulty: 'explorer', question: "What number is missing? 1, _, 3", answer: "2", options: ["2", "4", "5"] },
-      { type: 'numbers', difficulty: 'explorer', question: "What number comes after 4?", answer: "5", options: ["3", "5", "6"] },
-      { type: 'numbers', difficulty: 'explorer', question: "What number comes before 5?", answer: "4", options: ["3", "4", "6"] }
-    ],
-    addition: [
-      { type: 'addition', difficulty: 'explorer', question: "What is 1 + 1?", answer: "2", options: ["2", "3", "4"] },
-      { type: 'addition', difficulty: 'explorer', question: "What is 2 + 1?", answer: "3", options: ["2", "3", "4"] },
-      { type: 'addition', difficulty: 'explorer', question: "What is 1 + 2?", answer: "3", options: ["2", "3", "4"] },
-      { type: 'addition', difficulty: 'explorer', question: "What is 2 + 2?", answer: "4", options: ["3", "4", "5"] },
-      { type: 'addition', difficulty: 'explorer', question: "What is 3 + 1?", answer: "4", options: ["3", "4", "5"] }
-    ]
-  },
+// Generate dynamic alphabet puzzles
+const generateAlphabetPuzzles = (difficulty) => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const puzzles = [];
   
-  // Adventurer level (Ages 5-6) - Medium puzzles
-  adventurer: {
-    alphabet: [
-      { type: 'alphabet', difficulty: 'adventurer', question: "What letter comes after P?", answer: "Q", options: ["O", "Q", "R"] },
-      { type: 'alphabet', difficulty: 'adventurer', question: "What letter comes before D?", answer: "C", options: ["A", "B", "C"] },
-      { type: 'alphabet', difficulty: 'adventurer', question: "What letter is missing? A, B, _, D", answer: "C", options: ["C", "E", "G"] },
-      { type: 'alphabet', difficulty: 'adventurer', question: "What letter comes after G?", answer: "H", options: ["F", "H", "I"] },
-      { type: 'alphabet', difficulty: 'adventurer', question: "What letter is missing? W, X, _, Z", answer: "Y", options: ["T", "Y", "V"] }
-    ],
-    numbers: [
-      { type: 'numbers', difficulty: 'adventurer', question: "What number comes after 5?", answer: "6", options: ["6", "7", "8"] },
-      { type: 'numbers', difficulty: 'adventurer', question: "What number comes before 10?", answer: "9", options: ["8", "9", "11"] },
-      { type: 'numbers', difficulty: 'adventurer', question: "What number is missing? 2, 4, 6, _, 10", answer: "8", options: ["7", "8", "9"] },
-      { type: 'numbers', difficulty: 'adventurer', question: "What number comes after 14?", answer: "15", options: ["13", "15", "16"] },
-      { type: 'numbers', difficulty: 'adventurer', question: "What number is missing? 5, 10, _, 20", answer: "15", options: ["12", "15", "18"] }
-    ],
-    addition: [
-      { type: 'addition', difficulty: 'adventurer', question: "What is 2 + 3?", answer: "5", options: ["4", "5", "6"] },
-      { type: 'addition', difficulty: 'adventurer', question: "What is 4 + 4?", answer: "8", options: ["7", "8", "9"] },
-      { type: 'addition', difficulty: 'adventurer', question: "What is 5 + 3?", answer: "8", options: ["7", "8", "10"] },
-      { type: 'addition', difficulty: 'adventurer', question: "What is 6 + 2?", answer: "8", options: ["7", "8", "9"] },
-      { type: 'addition', difficulty: 'adventurer', question: "What is 7 + 3?", answer: "10", options: ["9", "10", "11"] }
-    ]
-  },
+  // Helper function to get random letter
+  const getRandomLetter = (exclude = []) => {
+    let letter;
+    do {
+      letter = alphabet[Math.floor(Math.random() * alphabet.length)];
+    } while (exclude.includes(letter));
+    return letter;
+  };
   
-  // Champion level (Ages 7-10) - Harder puzzles
-  champion: {
-    alphabet: [
-      { type: 'alphabet', difficulty: 'champion', question: "What letter comes 3 letters after D?", answer: "G", options: ["F", "G", "H"] },
-      { type: 'alphabet', difficulty: 'champion', question: "What letter comes 2 letters before J?", answer: "H", options: ["G", "H", "I"] },
-      { type: 'alphabet', difficulty: 'champion', question: "What letter is missing? D, H, L, _", answer: "P", options: ["O", "P", "Q"] },
-      { type: 'alphabet', difficulty: 'champion', question: "What letter comes 4 letters after M?", answer: "Q", options: ["P", "Q", "R"] },
-      { type: 'alphabet', difficulty: 'champion', question: "What letter is missing? B, D, F, _, J", answer: "H", options: ["G", "H", "I"] }
-    ],
-    numbers: [
-      { type: 'numbers', difficulty: 'champion', question: "What number comes 3 numbers after 7?", answer: "10", options: ["9", "10", "11"] },
-      { type: 'numbers', difficulty: 'champion', question: "What number comes 2 numbers before 15?", answer: "13", options: ["12", "13", "14"] },
-      { type: 'numbers', difficulty: 'champion', question: "What number is missing? 5, 10, 15, _", answer: "20", options: ["18", "19", "20"] },
-      { type: 'numbers', difficulty: 'champion', question: "What number is missing? 2, 4, 8, _", answer: "16", options: ["12", "14", "16"] },
-      { type: 'numbers', difficulty: 'champion', question: "What number is missing? 25, 20, 15, _, 5", answer: "10", options: ["10", "12", "14"] }
-    ],
-    addition: [
-      { type: 'addition', difficulty: 'champion', question: "What is 12 + 5?", answer: "17", options: ["16", "17", "18"] },
-      { type: 'addition', difficulty: 'champion', question: "What is 8 + 7?", answer: "15", options: ["14", "15", "16"] },
-      { type: 'addition', difficulty: 'champion', question: "What is 9 + 8?", answer: "17", options: ["16", "17", "18"] },
-      { type: 'addition', difficulty: 'champion', question: "What is 11 + 6?", answer: "17", options: ["16", "17", "19"] },
-      { type: 'addition', difficulty: 'champion', question: "What is 7 + 9?", answer: "16", options: ["15", "16", "17"] }
-    ]
-  },
-  
-  // Bonus questions - Extra challenging
-  bonus: {
-    alphabet: [
-      { type: 'alphabet', difficulty: 'bonus', question: "What letter is 5 letters after J?", answer: "O", options: ["M", "N", "O"] },
-      { type: 'alphabet', difficulty: 'bonus', question: "What letter is 3 letters before P?", answer: "M", options: ["L", "M", "N"] },
-      { type: 'alphabet', difficulty: 'bonus', question: "What letter is missing? A, E, I, _, Q", answer: "M", options: ["K", "M", "O"] },
-      { type: 'alphabet', difficulty: 'bonus', question: "What letter is 7 letters after C?", answer: "J", options: ["I", "J", "K"] },
-      { type: 'alphabet', difficulty: 'bonus', question: "What letter is missing? B, E, H, K, _", answer: "N", options: ["M", "N", "O"] }
-    ],
-    numbers: [
-      { type: 'numbers', difficulty: 'bonus', question: "What number is 5 more than 12?", answer: "17", options: ["16", "17", "18"] },
-      { type: 'numbers', difficulty: 'bonus', question: "What number is 4 less than 20?", answer: "16", options: ["15", "16", "17"] },
-      { type: 'numbers', difficulty: 'bonus', question: "What number is missing? 3, 6, 12, _", answer: "24", options: ["18", "21", "24"] },
-      { type: 'numbers', difficulty: 'bonus', question: "What number is missing? 2, 6, 18, _", answer: "54", options: ["36", "42", "54"] },
-      { type: 'numbers', difficulty: 'bonus', question: "What number is missing? 25, 20, _, 10, 5", answer: "15", options: ["12", "15", "18"] }
-    ],
-    addition: [
-      { type: 'addition', difficulty: 'bonus', question: "What is 14 + 8?", answer: "22", options: ["21", "22", "23"] },
-      { type: 'addition', difficulty: 'bonus', question: "What is 16 + 7?", answer: "23", options: ["22", "23", "24"] },
-      { type: 'addition', difficulty: 'bonus', question: "What is 9 + 12?", answer: "21", options: ["20", "21", "22"] },
-      { type: 'addition', difficulty: 'bonus', question: "What is 13 + 9?", answer: "22", options: ["21", "22", "24"] },
-      { type: 'addition', difficulty: 'bonus', question: "What is 15 + 8?", answer: "23", options: ["22", "23", "25"] }
-    ]
+  // Generate "what comes after" puzzles
+  for (let i = 0; i < alphabet.length - 1; i++) {
+    const letter = alphabet[i];
+    const nextLetter = alphabet[i + 1];
+    
+    // Skip some letters based on difficulty
+    if (difficulty === 'explorer' && !['A', 'C', 'E', 'G', 'I', 'K', 'M', 'O'].includes(letter)) continue;
+    if (difficulty === 'adventurer' && i % 3 !== 0) continue;
+    if (difficulty === 'champion' && i % 2 !== 0) continue;
+    
+    // Generate wrong options
+    const wrongOptions = [];
+    while (wrongOptions.length < 2) {
+      const wrongOption = getRandomLetter([nextLetter, ...wrongOptions]);
+      wrongOptions.push(wrongOption);
+    }
+    
+    puzzles.push({
+      type: 'alphabet',
+      difficulty,
+      question: `What letter comes after ${letter}?`,
+      answer: nextLetter,
+      options: [nextLetter, ...wrongOptions].sort(() => Math.random() - 0.5)
+    });
   }
+  
+  // Generate "what comes before" puzzles
+  for (let i = 1; i < alphabet.length; i++) {
+    const letter = alphabet[i];
+    const prevLetter = alphabet[i - 1];
+    
+    // Skip some letters based on difficulty
+    if (difficulty === 'explorer' && !['B', 'D', 'F', 'H', 'J', 'L', 'N'].includes(letter)) continue;
+    if (difficulty === 'adventurer' && i % 3 !== 1) continue;
+    if (difficulty === 'champion' && i % 2 !== 1) continue;
+    
+    // Generate wrong options
+    const wrongOptions = [];
+    while (wrongOptions.length < 2) {
+      const wrongOption = getRandomLetter([prevLetter, ...wrongOptions]);
+      wrongOptions.push(wrongOption);
+    }
+    
+    puzzles.push({
+      type: 'alphabet',
+      difficulty,
+      question: `What letter comes before ${letter}?`,
+      answer: prevLetter,
+      options: [prevLetter, ...wrongOptions].sort(() => Math.random() - 0.5)
+    });
+  }
+  
+  // Generate "what is missing" puzzles
+  for (let i = 1; i < alphabet.length - 1; i++) {
+    const prevLetter = alphabet[i - 1];
+    const letter = alphabet[i];
+    const nextLetter = alphabet[i + 1];
+    
+    // Skip some letters based on difficulty
+    if (difficulty === 'explorer' && !['B', 'D', 'F', 'H', 'J', 'L'].includes(letter)) continue;
+    if (difficulty === 'adventurer' && i % 3 !== 2) continue;
+    if (difficulty === 'champion' && i % 2 !== 0) continue;
+    
+    // Generate wrong options
+    const wrongOptions = [];
+    while (wrongOptions.length < 2) {
+      const wrongOption = getRandomLetter([letter, ...wrongOptions]);
+      wrongOptions.push(wrongOption);
+    }
+    
+    puzzles.push({
+      type: 'alphabet',
+      difficulty,
+      question: `What letter is missing? ${prevLetter}, _, ${nextLetter}`,
+      answer: letter,
+      options: [letter, ...wrongOptions].sort(() => Math.random() - 0.5)
+    });
+  }
+  
+  // For champion level, add pattern puzzles
+  if (difficulty === 'champion' || difficulty === 'bonus') {
+    const patterns = [
+      { step: 2, desc: "every other letter" },
+      { step: 3, desc: "every third letter" },
+      { step: 4, desc: "every fourth letter" }
+    ];
+    
+    patterns.forEach(pattern => {
+      for (let i = 0; i < alphabet.length - pattern.step * 3; i += 2) {
+        const first = alphabet[i];
+        const second = alphabet[i + pattern.step];
+        const third = alphabet[i + pattern.step * 2];
+        const answer = alphabet[i + pattern.step * 3];
+        
+        // Generate wrong options
+        const wrongOptions = [];
+        while (wrongOptions.length < 2) {
+          const wrongOption = getRandomLetter([answer, ...wrongOptions]);
+          wrongOptions.push(wrongOption);
+        }
+        
+        puzzles.push({
+          type: 'alphabet',
+          difficulty,
+          question: `What letter comes next? ${first}, ${second}, ${third}, _`,
+          answer,
+          options: [answer, ...wrongOptions].sort(() => Math.random() - 0.5)
+        });
+      }
+    });
+  }
+  
+  return puzzles;
 };
+
+// Generate dynamic number puzzles
+const generateNumberPuzzles = (difficulty) => {
+  const puzzles = [];
+  
+  // Helper function to get random number in range
+  const getRandomNumber = (min, max, exclude = []) => {
+    let num;
+    do {
+      num = Math.floor(Math.random() * (max - min + 1)) + min;
+    } while (exclude.includes(num));
+    return num;
+  };
+  
+  // Define ranges based on difficulty
+  const ranges = {
+    explorer: { min: 1, max: 10 },
+    adventurer: { min: 1, max: 20 },
+    champion: { min: 1, max: 50 },
+    bonus: { min: 1, max: 100 }
+  };
+  
+  const { min, max } = ranges[difficulty];
+  
+  // Generate "what comes after" puzzles
+  for (let i = min; i < max; i++) {
+    // Skip some numbers based on difficulty
+    if (difficulty === 'explorer' && i > 5 && i % 2 !== 0) continue;
+    if (difficulty === 'adventurer' && i > 10 && i % 3 !== 0) continue;
+    if (difficulty === 'champion' && i % 5 !== 0 && i % 7 !== 0) continue;
+    
+    const nextNumber = i + 1;
+    
+    // Generate wrong options
+    const wrongOptions = [];
+    while (wrongOptions.length < 2) {
+      const wrongOption = getRandomNumber(i + 2, i + 5, [nextNumber, ...wrongOptions]);
+      wrongOptions.push(wrongOption);
+    }
+    
+    puzzles.push({
+      type: 'numbers',
+      difficulty,
+      question: `What number comes after ${i}?`,
+      answer: String(nextNumber),
+      options: [String(nextNumber), ...wrongOptions.map(String)].sort(() => Math.random() - 0.5)
+    });
+  }
+  
+  // Generate "what comes before" puzzles
+  for (let i = min + 1; i <= max; i++) {
+    // Skip some numbers based on difficulty
+    if (difficulty === 'explorer' && i > 5 && i % 2 !== 0) continue;
+    if (difficulty === 'adventurer' && i > 10 && i % 3 !== 0) continue;
+    if (difficulty === 'champion' && i % 5 !== 0 && i % 7 !== 0) continue;
+    
+    const prevNumber = i - 1;
+    
+    // Generate wrong options
+    const wrongOptions = [];
+    while (wrongOptions.length < 2) {
+      const wrongOption = getRandomNumber(Math.max(min, i - 5), i - 2, [prevNumber, ...wrongOptions]);
+      wrongOptions.push(wrongOption);
+    }
+    
+    puzzles.push({
+      type: 'numbers',
+      difficulty,
+      question: `What number comes before ${i}?`,
+      answer: String(prevNumber),
+      options: [String(prevNumber), ...wrongOptions.map(String)].sort(() => Math.random() - 0.5)
+    });
+  }
+  
+  // Generate "what is missing" puzzles
+  for (let i = min + 1; i < max; i++) {
+    // Skip some numbers based on difficulty
+    if (difficulty === 'explorer' && i > 5 && i % 2 !== 0) continue;
+    if (difficulty === 'adventurer' && i > 10 && i % 3 !== 0) continue;
+    if (difficulty === 'champion' && i % 5 !== 0 && i % 7 !== 0) continue;
+    
+    const prevNumber = i - 1;
+    const nextNumber = i + 1;
+    
+    // Generate wrong options
+    const wrongOptions = [];
+    while (wrongOptions.length < 2) {
+      const wrongOption = getRandomNumber(min, max, [i, ...wrongOptions]);
+      wrongOptions.push(wrongOption);
+    }
+    
+    puzzles.push({
+      type: 'numbers',
+      difficulty,
+      question: `What number is missing? ${prevNumber}, _, ${nextNumber}`,
+      answer: String(i),
+      options: [String(i), ...wrongOptions.map(String)].sort(() => Math.random() - 0.5)
+    });
+  }
+  
+  // Generate pattern puzzles
+  if (difficulty === 'adventurer' || difficulty === 'champion' || difficulty === 'bonus') {
+    // Define patterns based on difficulty
+    const patterns = [];
+    
+    if (difficulty === 'adventurer') {
+      patterns.push(
+        { step: 2, count: 4, start: 2 },  // 2, 4, 6, 8
+        { step: 5, count: 4, start: 5 }   // 5, 10, 15, 20
+      );
+    }
+    
+    if (difficulty === 'champion') {
+      patterns.push(
+        { step: 3, count: 4, start: 3 },   // 3, 6, 9, 12
+        { step: 5, count: 4, start: 5 },   // 5, 10, 15, 20
+        { step: 10, count: 4, start: 10 }, // 10, 20, 30, 40
+        { step: -5, count: 4, start: 25 }  // 25, 20, 15, 10
+      );
+    }
+    
+    if (difficulty === 'bonus') {
+      patterns.push(
+        { step: 2, count: 5, start: 1 },    // 1, 3, 5, 7, 9
+        { step: 3, count: 5, start: 2 },    // 2, 5, 8, 11, 14
+        { step: 5, count: 5, start: 5 },    // 5, 10, 15, 20, 25
+        { step: -10, count: 5, start: 50 }, // 50, 40, 30, 20, 10
+        { multiply: 2, count: 4, start: 2 } // 2, 4, 8, 16
+      );
+    }
+    
+    patterns.forEach(pattern => {
+      const sequence = [];
+      let current = pattern.start;
+      
+      for (let i = 0; i < pattern.count; i++) {
+        sequence.push(current);
+        if (pattern.multiply) {
+          current *= pattern.multiply;
+        } else {
+          current += pattern.step;
+        }
+      }
+      
+      // Create missing number puzzles from the sequence
+      for (let i = 1; i < sequence.length - 1; i++) {
+        const missingNumber = sequence[i];
+        const sequenceCopy = [...sequence];
+        sequenceCopy[i] = '_';
+        
+        // Generate wrong options
+        const wrongOptions = [];
+        while (wrongOptions.length < 2) {
+          const wrongOption = getRandomNumber(
+            Math.max(min, missingNumber - 10), 
+            Math.min(max, missingNumber + 10), 
+            [missingNumber, ...wrongOptions]
+          );
+          wrongOptions.push(wrongOption);
+        }
+        
+        puzzles.push({
+          type: 'numbers',
+          difficulty,
+          question: `What number is missing? ${sequenceCopy.join(', ')}`,
+          answer: String(missingNumber),
+          options: [String(missingNumber), ...wrongOptions.map(String)].sort(() => Math.random() - 0.5)
+        });
+      }
+      
+      // Create "what comes next" puzzles
+      const nextNumber = sequence[sequence.length - 1];
+      const sequenceWithoutLast = sequence.slice(0, -1);
+      
+      // Generate wrong options
+      const wrongOptions = [];
+      while (wrongOptions.length < 2) {
+        const wrongOption = getRandomNumber(
+          Math.max(min, nextNumber - 10), 
+          Math.min(max, nextNumber + 10), 
+          [nextNumber, ...wrongOptions]
+        );
+        wrongOptions.push(wrongOption);
+      }
+      
+      puzzles.push({
+        type: 'numbers',
+        difficulty,
+        question: `What number comes next? ${sequenceWithoutLast.join(', ')}, _`,
+        answer: String(nextNumber),
+        options: [String(nextNumber), ...wrongOptions.map(String)].sort(() => Math.random() - 0.5)
+      });
+    });
+  }
+  
+  return puzzles;
+};
+
+// Generate dynamic addition puzzles
+const generateAdditionPuzzles = (difficulty) => {
+  const puzzles = [];
+  
+  // Define ranges based on difficulty
+  const ranges = {
+    explorer: { max: 5, maxSum: 5 },
+    adventurer: { max: 10, maxSum: 10 },
+    champion: { max: 12, maxSum: 20 },
+    bonus: { max: 20, maxSum: 30 }
+  };
+  
+  const { max, maxSum } = ranges[difficulty];
+  
+  // Generate addition puzzles
+  for (let a = 1; a <= max; a++) {
+    for (let b = 1; b <= max; b++) {
+      const sum = a + b;
+      
+      // Skip if sum is too large for this difficulty
+      if (sum > maxSum) continue;
+      
+      // Skip some combinations based on difficulty
+      if (difficulty === 'explorer' && a > 3 && b > 3) continue;
+      if (difficulty === 'adventurer' && a + b > 15) continue;
+      
+      // Generate wrong options
+      const wrongOptions = [];
+      while (wrongOptions.length < 2) {
+        // Generate wrong answers close to the correct sum
+        const offset = Math.floor(Math.random() * 3) + 1;
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        const wrongOption = sum + (offset * direction);
+        
+        // Ensure wrong option is positive and not the same as the correct answer
+        if (wrongOption > 0 && wrongOption !== sum && !wrongOptions.includes(wrongOption)) {
+          wrongOptions.push(wrongOption);
+        }
+      }
+      
+      puzzles.push({
+        type: 'addition',
+        difficulty,
+        question: `What is ${a} + ${b}?`,
+        answer: String(sum),
+        options: [String(sum), ...wrongOptions.map(String)].sort(() => Math.random() - 0.5)
+      });
+    }
+  }
+  
+  return puzzles;
+};
+
+// Generate all puzzles
+const generateAllPuzzles = () => {
+  const difficulties = ['explorer', 'adventurer', 'champion', 'bonus'];
+  const puzzleLibrary = {};
+  
+  difficulties.forEach(difficulty => {
+    puzzleLibrary[difficulty] = {
+      alphabet: generateAlphabetPuzzles(difficulty),
+      numbers: generateNumberPuzzles(difficulty),
+      addition: generateAdditionPuzzles(difficulty)
+    };
+  });
+  
+  return puzzleLibrary;
+};
+
+// Generate the puzzle library
+const puzzleLibrary = generateAllPuzzles();
 
 // Track used puzzles to prevent immediate repeats
 const usedPuzzles = {
@@ -127,6 +422,30 @@ const usedPuzzles = {
   }
 };
 
+// Track puzzles used in the current game session
+const sessionUsedPuzzles = {
+  explorer: {
+    alphabet: new Set(),
+    numbers: new Set(),
+    addition: new Set()
+  },
+  adventurer: {
+    alphabet: new Set(),
+    numbers: new Set(),
+    addition: new Set()
+  },
+  champion: {
+    alphabet: new Set(),
+    numbers: new Set(),
+    addition: new Set()
+  },
+  bonus: {
+    alphabet: new Set(),
+    numbers: new Set(),
+    addition: new Set()
+  }
+};
+
 // Get a random puzzle of specified type and difficulty
 export const getRandomPuzzle = async (type, difficulty = null, skillLevel = 'adventurer') => {
   try {
@@ -144,15 +463,35 @@ export const getRandomPuzzle = async (type, difficulty = null, skillLevel = 'adv
       return getRandomPuzzle(type, null, 'adventurer');
     }
     
-    // Filter out recently used puzzles
+    // Filter out recently used puzzles (both in current session and recent history)
     let availablePuzzles = puzzles.filter(puzzle => 
-      !usedPuzzles[actualDifficulty][type].includes(puzzle.question)
+      !usedPuzzles[actualDifficulty][type].includes(puzzle.question) &&
+      !sessionUsedPuzzles[actualDifficulty][type].has(puzzle.question)
     );
     
-    // If we've used all puzzles, reset the used puzzles
+    // If we've used too many puzzles in this session, reset the session tracking
+    if (availablePuzzles.length < puzzles.length * 0.2) {
+      console.log("Running low on puzzles, resetting session tracking for type:", type);
+      sessionUsedPuzzles[actualDifficulty][type].clear();
+      
+      // Refilter with only the recent history filter
+      availablePuzzles = puzzles.filter(puzzle => 
+        !usedPuzzles[actualDifficulty][type].includes(puzzle.question)
+      );
+    }
+    
+    // If we've used all puzzles in recent history, reset that too
     if (availablePuzzles.length === 0) {
-      console.log("All puzzles used, resetting used puzzles for type:", type, "and difficulty:", actualDifficulty);
+      console.log("All puzzles used in recent history, resetting for type:", type);
       usedPuzzles[actualDifficulty][type] = [];
+      availablePuzzles = puzzles.filter(puzzle => 
+        !sessionUsedPuzzles[actualDifficulty][type].has(puzzle.question)
+      );
+    }
+    
+    // If we still have no puzzles, just use all puzzles
+    if (availablePuzzles.length === 0) {
+      console.log("No available puzzles after filtering, using all puzzles for type:", type);
       availablePuzzles = puzzles;
     }
     
@@ -160,11 +499,12 @@ export const getRandomPuzzle = async (type, difficulty = null, skillLevel = 'adv
     const randomIndex = Math.floor(Math.random() * availablePuzzles.length);
     const selectedPuzzle = availablePuzzles[randomIndex];
     
-    // Add to used puzzles
+    // Add to used puzzles tracking
     usedPuzzles[actualDifficulty][type].push(selectedPuzzle.question);
+    sessionUsedPuzzles[actualDifficulty][type].add(selectedPuzzle.question);
     
     // Keep used puzzles list from growing too large
-    if (usedPuzzles[actualDifficulty][type].length > puzzles.length / 2) {
+    if (usedPuzzles[actualDifficulty][type].length > Math.min(10, puzzles.length / 2)) {
       usedPuzzles[actualDifficulty][type].shift();
     }
     
@@ -220,6 +560,16 @@ export const getUserProgress = async (userId) => {
     console.error("Error getting user progress:", error);
     return {};
   }
+};
+
+// Reset session puzzle tracking (call this when starting a new game)
+export const resetSessionPuzzles = () => {
+  Object.keys(sessionUsedPuzzles).forEach(difficulty => {
+    Object.keys(sessionUsedPuzzles[difficulty]).forEach(type => {
+      sessionUsedPuzzles[difficulty][type].clear();
+    });
+  });
+  console.log("Session puzzle tracking reset");
 };
 
 // Fetch leaderboard data with current player included
