@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding Tilly</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="welcome-screen" class="screen">
+            <h1>Finding Tilly</h1>
+            <p>Oh no! Tilly is hiding somewhere! Solve puzzles to find her!</p>
+            <div class="input-container">
+                <label for="player-name">What's your name, brave explorer?</label>
+                <input type="text" id="player-name" placeholder="Enter your name">
+                <button id="start-button" class="big-button">Start Adventure!</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen hidden">
+            <div id="header">
+                <h2>Finding Tilly</h2>
+                <div id="player-info">
+                    <span id="player-name-display"></span>
+                    <span id="moves-counter">Moves: 0</span>
+                    <span id="puzzles-solved-counter">Puzzles: 0</span>
+                </div>
+            </div>
+
+            <div id="game-area">
+                <div id="location-image-container">
+                    <img id="location-image" src="images/home.png" alt="Current location">
+                </div>
+                
+                <div id="game-info">
+                    <div id="location-description"></div>
+                    
+                    <div id="navigation">
+                        <h3>Where to go?</h3>
+                        <div id="direction-buttons"></div>
+                    </div>
+                    
+                    <div id="puzzle-container">
+                        <h3>Puzzle</h3>
+                        <div id="puzzle-question"></div>
+                        <div id="puzzle-options"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="controls">
+                <button id="hint-button" class="control-button">Get a Hint</button>
+                <button id="look-button" class="control-button">Look Around</button>
+            </div>
+            
+            <div id="message-box"></div>
+        </div>
+
+        <div id="win-screen" class="screen hidden">
+            <h1>Hooray! You Found Tilly!</h1>
+            <div id="win-image-container">
+                <img src="images/tilly_found.png" alt="Tilly found!">
+            </div>
+            <div id="win-stats"></div>
+            <button id="play-again-button" class="big-button">Play Again!</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
