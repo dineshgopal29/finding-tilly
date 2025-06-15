@@ -80,13 +80,32 @@ Puzzles are dynamically generated based on:
 
 1. **Location**: Each location has a specific puzzle type
 2. **Skill Level**: Difficulty adapts to the selected skill level
-3. **Progress**: Puzzles avoid repetition by tracking previously used questions
+3. **Progress**: Puzzles avoid repetition through advanced tracking mechanisms
 
 Each puzzle includes:
 
 - A question (e.g., "What letter comes after P?")
 - Multiple choice answers
 - Optional visual aids for additional support
+
+#### Dynamic Puzzle Generation
+
+The game uses a sophisticated system to generate puzzles dynamically:
+
+1. **Alphabet Puzzles**: Generated from the entire alphabet with appropriate patterns
+2. **Number Puzzles**: Generated with ranges and patterns suitable for each skill level
+3. **Addition Puzzles**: Generated with operands and sums appropriate for each skill level
+
+This approach creates hundreds of unique puzzles, ensuring variety and preventing repetition.
+
+#### Puzzle Tracking System
+
+To prevent repetition, the game implements a two-tier tracking system:
+
+1. **Session Tracking**: Prevents puzzles from repeating within a single game session
+2. **Recent History Tracking**: Prevents the same puzzles from appearing too soon after being used
+
+When the available puzzle pool runs low, the system intelligently resets tracking to ensure continued variety.
 
 ### Progress Tracking
 
@@ -138,13 +157,46 @@ The game uses positive reinforcement through:
 
 ### Puzzle Generation
 
-Puzzles are generated from a library of questions organized by:
+Puzzles are dynamically generated using specialized functions for each type:
 
-1. **Type**: Alphabet, numbers, or addition
-2. **Difficulty**: Explorer, adventurer, or champion level
-3. **Format**: Question structure and answer options
+1. **generateAlphabetPuzzles**: Creates alphabet-related puzzles
+2. **generateNumberPuzzles**: Creates number sequence puzzles
+3. **generateAdditionPuzzles**: Creates addition problems
 
-The `gameService.js` file handles puzzle selection, ensuring appropriate difficulty and preventing repetition.
+Each function tailors the puzzles to the appropriate difficulty level:
+
+```javascript
+// Generate dynamic alphabet puzzles
+const generateAlphabetPuzzles = (difficulty) => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const puzzles = [];
+  
+  // Generate "what comes after" puzzles
+  // Generate "what comes before" puzzles
+  // Generate "what is missing" puzzles
+  // Generate pattern puzzles for higher difficulties
+  
+  return puzzles;
+};
+```
+
+### Puzzle Selection Algorithm
+
+The `getRandomPuzzle` function implements an intelligent selection algorithm:
+
+1. Filter out puzzles used in the current session
+2. Filter out puzzles used in recent history
+3. Reset tracking when running low on available puzzles
+4. Randomly select from the available pool
+5. Update tracking to prevent future repetition
+
+```javascript
+// Filter out recently used puzzles
+let availablePuzzles = puzzles.filter(puzzle => 
+  !usedPuzzles[actualDifficulty][type].includes(puzzle.question) &&
+  !sessionUsedPuzzles[actualDifficulty][type].has(puzzle.question)
+);
+```
 
 ### Location Management
 
@@ -184,6 +236,7 @@ The interface is designed specifically for children with:
 3. **Bright Colors**: Engaging visual palette
 4. **Emoji-Based Visuals**: Familiar and friendly imagery
 5. **Minimal Text**: Reduced reading requirements for younger players
+6. **Interactive Popups**: Engaging dialog boxes for hints and location information
 
 ### Accessibility
 

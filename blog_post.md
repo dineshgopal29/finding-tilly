@@ -116,29 +116,64 @@ This modular approach allowed us to:
 
 One of our biggest challenges was designing puzzles that would be appropriate for different age groups while maintaining a consistent game structure.
 
-**Solution**: We created a comprehensive puzzle library in `gameService.js` with questions categorized by both type (alphabet, numbers, addition) and difficulty level (explorer, adventurer, champion):
+**Solution**: We created a dynamic puzzle generation system that tailors content to each skill level:
 
 ```javascript
-const puzzleLibrary = {
-  explorer: {
-    alphabet: [
-      { type: 'alphabet', difficulty: 'explorer', question: "What letter comes after A?", answer: "B", options: ["B", "C", "D"] },
-      // More puzzles...
-    ],
-    // More categories...
-  },
-  adventurer: {
-    // Intermediate difficulty puzzles...
-  },
-  champion: {
-    // Advanced difficulty puzzles...
+// Generate dynamic alphabet puzzles
+const generateAlphabetPuzzles = (difficulty) => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const puzzles = [];
+  
+  // Generate different types of puzzles based on difficulty
+  if (difficulty === 'explorer') {
+    // Simple puzzles for young children
+  } else if (difficulty === 'adventurer') {
+    // Intermediate puzzles
+  } else if (difficulty === 'champion') {
+    // More challenging puzzles
   }
+  
+  return puzzles;
 };
 ```
 
-This structure allowed us to dynamically select puzzles based on the player's skill level and current location, ensuring an appropriate challenge for each age group.
+This approach generates hundreds of unique puzzles for each category and difficulty level, ensuring appropriate challenges for each age group while preventing repetition.
 
-### Challenge 2: Creating an Engaging Visual Experience Without Images
+### Challenge 2: Preventing Puzzle Repetition
+
+Initially, we had a small set of predefined puzzles, but children quickly noticed repetition, which reduced engagement.
+
+**Solution**: We implemented a sophisticated two-tier tracking system:
+
+```javascript
+// Two-tier tracking system
+const sessionUsedPuzzles = {
+  explorer: {
+    alphabet: new Set(),
+    numbers: new Set(),
+    addition: new Set()
+  },
+  // Other difficulty levels...
+};
+
+const usedPuzzles = {
+  explorer: {
+    alphabet: [],
+    numbers: [],
+    addition: []
+  },
+  // Other difficulty levels...
+};
+```
+
+This system:
+1. Prevents puzzles from repeating within a single game session
+2. Reduces the likelihood of seeing recently used puzzles
+3. Intelligently resets when the available pool runs low
+
+The result is a much more varied and engaging experience that keeps children interested for longer periods.
+
+### Challenge 3: Creating an Engaging Visual Experience Without Images
 
 Initially, we planned to use location images throughout the game, but we encountered challenges with image loading and consistency.
 
@@ -169,7 +204,7 @@ This approach offered several advantages:
 - Scalable to any screen size
 - Accessible visual representation
 
-### Challenge 3: Maintaining Child Engagement
+### Challenge 4: Maintaining Child Engagement
 
 Children have shorter attention spans than adults, so keeping them engaged throughout the game was crucial.
 
@@ -180,6 +215,7 @@ Children have shorter attention spans than adults, so keeping them engaged throu
 3. **Streak Counter**: Recognition for consecutive correct answers
 4. **Celebration Effects**: Confetti animation when Tilly is found
 5. **Achievement Certificate**: Printable reward for game completion
+6. **Interactive Popups**: Engaging dialog boxes for hints and location information
 
 The streak counter was particularly effective:
 
@@ -256,6 +292,30 @@ For younger players or those who needed extra help, we implemented optional visu
 
 These aids provided additional support without making the game feel "babyish" for more advanced players.
 
+### Interactive Popups
+
+We replaced basic alerts with engaging, animated popups for hints and location information:
+
+```jsx
+{showHintPopup && (
+  <div className="popup-overlay">
+    <div className="popup-container hint-popup">
+      <div className="popup-header">
+        <h3>{popupTitle}</h3>
+        <button className="close-button" onClick={closePopup}>×</button>
+      </div>
+      <div className="popup-content">
+        <p>{popupContent}</p>
+        <div className="hint-icon">💡</div>
+      </div>
+      <button className="popup-button" onClick={closePopup}>Got it!</button>
+    </div>
+  </div>
+)}
+```
+
+These popups create a more immersive and polished experience while providing important information in a child-friendly way.
+
 ### Positive Reinforcement
 
 We designed feedback to be encouraging even when players made mistakes:
@@ -294,6 +354,7 @@ These sessions provided invaluable insights that led to several improvements:
 - More animated feedback for correct answers
 - Clearer visual distinction between locations
 - Addition of the streak counter for motivation
+- Implementation of the dynamic puzzle generation system to prevent repetition
 
 ## Lessons Learned
 
@@ -309,11 +370,15 @@ We initially planned more complex puzzles and game mechanics but found that simp
 
 Children respond strongly to immediate feedback. Our most successful elements were those that provided clear, positive reinforcement for actions and achievements.
 
-### 4. Accessibility Matters
+### 4. Variety Matters
+
+Children notice repetition much more quickly than we anticipated. Our dynamic puzzle generation system was crucial for maintaining engagement over multiple play sessions.
+
+### 5. Accessibility Matters
 
 Designing for children means considering varying levels of reading ability, motor skills, and cognitive development. Features like emoji-based visuals and optional aids made the game more accessible to a wider range of players.
 
-### 5. Testing is Non-Negotiable
+### 6. Testing is Non-Negotiable
 
 No amount of theory can replace actual observation of children using the application. Their unexpected interactions and feedback shaped our most important improvements.
 
@@ -331,7 +396,7 @@ While the current version of Finding Tilly meets our core objectives, we've iden
 
 Creating Finding Tilly was a journey that combined educational theory, software development, and user experience design for a unique audience. The result is more than just a game—it's a learning tool that makes education engaging and accessible for young children.
 
-By leveraging React's component architecture and Context API, we built a scalable application that can grow with additional features while maintaining its educational integrity. The emoji-based visual system and carefully designed user experience create an engaging environment where learning happens naturally through play.
+By leveraging React's component architecture and Context API, we built a scalable application that can grow with additional features while maintaining its educational integrity. The emoji-based visual system, carefully designed user experience, and dynamic puzzle generation create an engaging environment where learning happens naturally through play.
 
 Most importantly, Finding Tilly demonstrates that educational applications don't need to sacrifice fun for learning—with thoughtful design, they can achieve both simultaneously.
 
