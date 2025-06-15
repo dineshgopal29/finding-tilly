@@ -43,7 +43,7 @@ Finding Tilly is an interactive educational game designed for children ages 3-10
 3. Set up Firebase:
    - Create a Firebase project at [firebase.google.com](https://firebase.google.com)
    - Enable Authentication and Firestore Database
-   - Update the Firebase configuration in `src/firebase.js`
+   - Copy `.env.example` to `.env` and update with your Firebase configuration
 
 4. Start the development server:
    ```
