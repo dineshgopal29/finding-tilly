@@ -1,857 +1,251 @@
 # Finding Tilly - Project Documentation
 
-## Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [Project Evolution](#project-evolution)
-3. [Technical Architecture](#technical-architecture)
-4. [Implementation Details](#implementation-details)
-5. [Educational Content](#educational-content)
-6. [User Experience](#user-experience)
-7. [Backend Integration](#backend-integration)
-8. [Deployment Guide](#deployment-guide)
-9. [Future Enhancements](#future-enhancements)
-10. [Resources and References](#resources-and-references)
-
 ## Project Overview
 
-### Description
+Finding Tilly is an educational web game designed for children ages 3-10 that combines storytelling with educational puzzles. The game revolves around finding a hidden cat named Tilly by navigating through different locations and solving age-appropriate puzzles related to alphabet recognition, number sequences, and basic addition.
 
-Finding Tilly is an educational web game designed for young children that combines exploration with learning. Players navigate through different locations to solve educational puzzles related to alphabet recognition, number sequences, and basic addition. After solving a certain number of puzzles, they find Tilly, the character who is hiding.
+## Educational Goals
 
-### Target Audience
+1. **Literacy Development**: Improve alphabet recognition and sequencing skills
+2. **Numeracy Development**: Enhance number recognition, counting, and basic arithmetic
+3. **Problem-Solving Skills**: Develop logical thinking and pattern recognition
+4. **Digital Literacy**: Introduce children to interactive digital learning experiences
+5. **Engagement**: Create a fun, rewarding experience that motivates learning
 
-- Primary: Children ages 3-7 years
-- Secondary: Parents and educators looking for educational games
+## Target Audience
 
-### Educational Objectives
+The game is designed for children ages 3-10, with three distinct skill levels:
 
-- Improve letter recognition and alphabet sequence understanding
-- Develop number recognition and counting skills
-- Introduce basic addition concepts (sums up to 20)
-- Enhance pattern recognition through finding missing elements in sequences
-- Build problem-solving skills through exploration and puzzles
-
-### Key Features
-
-- Kid-friendly interface with large buttons and simple navigation
-- Educational puzzles tailored to young learners
-- Progress tracking and achievements
-- Hint system to guide younger players
-- Sound effects for engagement and feedback
-- Leaderboard to motivate continued learning
-
-## Project Evolution
-
-### Phase 1: Text-Based Prototype
-
-The project began as a simple text-based adventure game written in Python:
-
-```python
-#!/usr/bin/env python3
-"""
-Finding Tilly - A simple adventure game for kids
-"""
-import random
-import time
-import os
-
-class Game:
-    def __init__(self):
-        self.player_name = ""
-        self.tilly_location = ""
-        self.current_location = "home"
-        # More initialization code...
-```
-
-This version featured:
-- Location-based navigation
-- Item collection
-- A hint system
-- Random placement of Tilly
-
-### Phase 2: Web-Based Implementation
-
-The game was converted to a web application using HTML, CSS, and JavaScript:
-
-```html
-<div id="game-container">
-    <div id="welcome-screen" class="screen">
-        <h1>Finding Tilly</h1>
-        <p>Oh no! Tilly is hiding somewhere!</p>
-        <!-- More welcome screen content -->
-    </div>
-    
-    <div id="game-screen" class="screen hidden">
-        <!-- Game content -->
-    </div>
-</div>
-```
-
-Key improvements included:
-- Visual interface with location images
-- Kid-friendly design with bright colors and large buttons
-- Simple click-based navigation
-
-### Phase 3: Educational Enhancement
-
-The game was transformed to focus on educational content:
-
-```javascript
-// Educational puzzles by category
-puzzles: {
-    alphabet: [
-        { question: "What letter comes after A?", answer: "B", options: ["B", "C", "D"] },
-        // More alphabet puzzles
-    ],
-    numbers: [
-        { question: "What number comes after 5?", answer: "6", options: ["6", "7", "8"] },
-        // More number puzzles
-    ],
-    addition: [
-        { question: "What is 2 + 3?", answer: "5", options: ["4", "5", "6"] },
-        // More addition puzzles
-    ]
-}
-```
-
-This phase introduced:
-- Educational puzzles by location type
-- Multiple-choice answers
-- Progress-based win condition (solve 5 puzzles to find Tilly)
-
-### Phase 4: React SPA with Firebase Backend
-
-The latest version is a React single-page application with Firebase backend:
-
-```jsx
-// React component structure
-function App() {
-  return (
-    <Router>
-      <AuthProvider>
-        <GameProvider>
-          <div className="app">
-            <Routes>
-              <Route path="/" element={<WelcomeScreen />} />
-              <Route path="/game" element={<GameScreen />} />
-              <Route path="/win" element={<WinScreen />} />
-              <Route path="/leaderboard" element={<LeaderboardScreen />} />
-            </Routes>
-          </div>
-        </GameProvider>
-      </AuthProvider>
-    </Router>
-  );
-}
-```
-
-This version features:
-- Component-based architecture
-- Context-based state management
-- User authentication and progress tracking
-- Database storage for puzzles and user data
-- Leaderboard functionality
+1. **Explorer (Ages 3-4)**: Preschoolers beginning to learn letters and numbers
+2. **Adventurer (Ages 5-6)**: Kindergarteners with basic literacy and numeracy skills
+3. **Champion (Ages 7-10)**: Elementary students ready for more complex challenges
 
 ## Technical Architecture
 
-### Web Version (HTML/CSS/JavaScript)
+### Frontend Architecture
 
-```
-/finding_tilly/
-├── index.html          # Main HTML structure
-├── styles.css          # CSS styling
-├── game.js             # Game logic
-├── README.md           # Project documentation
-├── finding_tilly_game.md  # Development blog
-├── /images/            # Location and UI images
-└── /sounds/            # Game sound effects
-```
+Finding Tilly is built using React.js, a popular JavaScript library for building user interfaces. The application follows a component-based architecture, with each UI element encapsulated in its own component.
 
-### React SPA Version
+#### Key Technologies
 
-```
-/finding-tilly-react/
-├── public/
-│   ├── index.html      # HTML entry point
-│   ├── /images/        # Game images
-│   └── /sounds/        # Game sounds
-├── src/
-│   ├── components/     # React components
-│   │   ├── WelcomeScreen.js
-│   │   ├── GameScreen.js
-│   │   ├── LocationDisplay.js
-│   │   ├── PuzzleDisplay.js
-│   │   ├── Navigation.js
-│   │   ├── WinScreen.js
-│   │   └── LeaderboardScreen.js
-│   ├── contexts/       # React contexts
-│   │   ├── GameContext.js
-│   │   └── AuthContext.js
-│   ├── services/       # Firebase services
-│   │   ├── firebase.js
-│   │   └── gameService.js
-│   ├── styles/         # Component styles
-│   │   ├── WelcomeScreen.css
-│   │   ├── GameScreen.css
-│   │   └── ...
-│   ├── App.js          # Main application component
-│   ├── App.css         # Global styles
-│   └── index.js        # React entry point
-└── package.json        # Dependencies and scripts
-```
+- **React.js**: Core UI library
+- **React Router**: For navigation between screens
+- **CSS3**: For styling and animations
+- **Firebase** (optional): For authentication and data storage
 
-### Firebase Backend Structure
+#### State Management
 
-```
-Firebase Project
-├── Authentication
-│   └── Users
-├── Firestore Database
-│   ├── users/
-│   │   └── [userId]/
-│   │       ├── name
-│   │       ├── email
-│   │       ├── createdAt
-│   │       ├── progress/
-│   │       │   ├── totalPuzzlesSolved
-│   │       │   ├── alphabetPuzzlesSolved
-│   │       │   ├── numberPuzzlesSolved
-│   │       │   ├── additionPuzzlesSolved
-│   │       │   ├── hintsUsed
-│   │       │   └── lastPlayed
-│   │       └── badges/
-│   │           └── [badge objects]
-│   └── puzzles/
-│       └── [puzzleId]/
-│           ├── type (alphabet, numbers, addition)
-│           ├── difficulty (easy, medium, hard)
-│           ├── question
-│           ├── answer
-│           └── options
-└── Hosting
-    └── [deployed files]
-```
+The application uses React Context API for state management, with two main contexts:
 
-## Implementation Details
+1. **GameContext**: Manages all game-related state
+2. **AuthContext**: Handles user authentication and profile management
 
-### Game State Management
+This approach allows for efficient state sharing across components without prop drilling, while maintaining a clean component structure.
 
-#### Web Version
+### Component Structure
 
-```javascript
-// Game state in vanilla JavaScript
-const gameState = {
-    playerName: "",
-    currentLocation: "home",
-    tillyLocation: "",
-    inventory: [],
-    hintsUsed: 0,
-    moves: 0,
-    gameStarted: false,
-    gameWon: false,
-    currentPuzzle: null,
-    puzzlesSolved: 0,
-    
-    // Educational puzzles by category
-    puzzles: {
-        // Puzzle definitions
-    },
-    
-    // Game locations and their properties
-    locations: {
-        // Location definitions
-    }
-};
-```
+The application is organized into the following key components:
 
-#### React Version
+1. **App**: The root component that sets up routing and context providers
+2. **WelcomeScreen**: Initial screen for player name input and skill level selection
+3. **GameScreen**: Main game interface that coordinates location display and puzzles
+4. **LocationDisplay**: Visual representation of the current location
+5. **PuzzleDisplay**: Interactive puzzle interface with answer options
+6. **WinScreen**: Celebration screen when Tilly is found
+7. **LeaderboardScreen**: Display of top players and achievements
 
-```jsx
-// Game state using React Context
-export const GameProvider = ({ children }) => {
-  const [gameState, setGameState] = useState({
-    playerName: "",
-    userId: null,
-    currentLocation: "home",
-    currentPuzzle: null,
-    puzzlesSolved: 0,
-    hintsUsed: 0,
-    moves: 0,
-    gameStarted: false,
-    gameWon: false,
-    locations: locations,
-    sounds: null,
-    progress: {},
-    badges: [],
-    isLoading: true
-  });
+### Data Flow
 
-  // State update methods
-  const updateGameState = (newState) => {
-    setGameState(prevState => ({
-      ...prevState,
-      ...newState
-    }));
-  };
+1. Player information and game settings are collected in the WelcomeScreen
+2. This data is stored in GameContext and persists throughout the game session
+3. As players navigate between locations, the GameScreen updates the current location in GameContext
+4. PuzzleDisplay fetches puzzles based on the current location and skill level
+5. When puzzles are solved, progress is updated in GameContext
+6. When win conditions are met, the player is redirected to the WinScreen
 
-  // More methods...
+## Game Mechanics
 
-  return (
-    <GameContext.Provider value={{ gameState, updateGameState, resetGame, formatLocationName, playSound }}>
-      {children}
-    </GameContext.Provider>
-  );
-};
-```
+### Navigation System
+
+Players navigate through different locations by selecting from available exits. Each location has:
+
+- A unique name and description
+- A visual representation
+- A specific puzzle type (alphabet, numbers, or addition)
+- Connected exits to other locations
 
 ### Puzzle System
 
-Puzzles are categorized by type:
+Puzzles are dynamically generated based on:
 
-1. **Alphabet Puzzles**
-   - Letter sequencing (what comes before/after)
-   - Finding missing letters in sequences
-
-2. **Number Puzzles**
-   - Number sequencing (what comes before/after)
-   - Finding missing numbers in sequences
-
-3. **Addition Puzzles**
-   - Simple addition problems (sums up to 20)
+1. **Location**: Each location has a specific puzzle type
+2. **Skill Level**: Difficulty adapts to the selected skill level
+3. **Progress**: Puzzles avoid repetition by tracking previously used questions
 
 Each puzzle includes:
-- A question
-- The correct answer
-- Multiple-choice options
 
-```javascript
-{
-  question: "What letter comes after A?", 
-  answer: "B", 
-  options: ["B", "C", "D"]
-}
-```
-
-### Location System
-
-Each location in the game has:
-- A description
-- Connections to other locations
-- An associated puzzle type
-- An image
-
-```javascript
-"home": {
-  description: "You are at home. Tilly left a puzzle for you to solve!",
-  connections: ["garden", "kitchen", "bedroom"],
-  puzzleType: "alphabet",
-  image: "/images/home.png"
-}
-```
-
-### User Authentication
-
-The React version supports both registered users and guest mode:
-
-```jsx
-// Create guest user
-const createGuestUser = async (name) => {
-  try {
-    // Generate a unique ID for the guest user
-    const guestId = `guest_${Date.now()}`;
-    
-    // Create user document in Firestore
-    await setDoc(doc(db, 'users', guestId), {
-      name: name,
-      isGuest: true,
-      createdAt: new Date(),
-      progress: {
-        totalPuzzlesSolved: 0,
-        alphabetPuzzlesSolved: 0,
-        numberPuzzlesSolved: 0,
-        additionPuzzlesSolved: 0,
-        hintsUsed: 0,
-        lastPlayed: new Date()
-      },
-      badges: []
-    });
-    
-    // Return guest user object
-    return {
-      uid: guestId,
-      displayName: name,
-      isGuest: true
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-```
+- A question (e.g., "What letter comes after P?")
+- Multiple choice answers
+- Optional visual aids for additional support
 
 ### Progress Tracking
 
-User progress is tracked in Firebase:
-
-```jsx
-// Update user progress
-export const updateUserProgress = async (userId, progressData) => {
-  try {
-    // Get current user data
-    const userRef = doc(db, 'users', userId);
-    const userSnap = await getDoc(userRef);
-    
-    if (userSnap.exists()) {
-      const userData = userSnap.data();
-      
-      // Update progress
-      const updatedProgress = {
-        ...userData.progress,
-        ...progressData,
-        lastUpdated: new Date()
-      };
-      
-      // Calculate new badges if applicable
-      const badges = calculateBadges(updatedProgress);
-      
-      // Update user document
-      await updateDoc(userRef, {
-        progress: updatedProgress,
-        badges: badges
-      });
-      
-      return true;
-    } else {
-      console.error("User document not found");
-      return false;
-    }
-  } catch (error) {
-    console.error("Error updating user progress:", error);
-    return false;
-  }
-};
-```
-
-### Badge System
-
-Badges are awarded based on progress milestones:
-
-```jsx
-// Calculate badges based on progress
-const calculateBadges = (progress) => {
-  const badges = [];
-  
-  // Alphabet badges
-  if (progress.alphabetPuzzlesSolved >= 5) {
-    badges.push({
-      type: 'alphabet',
-      level: 'bronze',
-      name: 'Alphabet Explorer',
-      icon: '🔤'
-    });
-  }
-  if (progress.alphabetPuzzlesSolved >= 15) {
-    badges.push({
-      type: 'alphabet',
-      level: 'silver',
-      name: 'Alphabet Master',
-      icon: '📝'
-    });
-  }
-  // More badge definitions...
-  
-  return badges;
-};
-```
-
-## Educational Content
-
-### Alphabet Learning
-
-Puzzles focus on:
-- Letter recognition
-- Alphabet sequence (before/after relationships)
-- Missing letter identification
-
-Example puzzles:
-- "What letter comes after A?"
-- "What letter comes before D?"
-- "What letter is missing? A, B, _, D"
-
-### Number Skills
-
-Puzzles focus on:
-- Number recognition
-- Counting sequence (before/after relationships)
-- Missing number identification
-
-Example puzzles:
-- "What number comes after 5?"
-- "What number comes before 10?"
-- "What number is missing? 2, 4, 6, _, 10"
-
-### Addition Skills
-
-Puzzles focus on:
-- Basic addition with sums up to 20
-- Visual counting and combining
-
-Example puzzles:
-- "What is 2 + 3?"
-- "What is 4 + 4?"
-- "What is 5 + 3?"
-
-## User Experience
-
-### Visual Design
-
-The game features a kid-friendly design with:
-- Bright, cheerful colors
-- Large, easy-to-click buttons
-- Comic Sans font for readability
-- Visual feedback for actions
-
-CSS variables define the color scheme:
-
-```css
-:root {
-  --primary-color: #FF9E44;
-  --secondary-color: #4DCCBD;
-  --accent-color: #FF5A5F;
-  --background-color: #F9F7F3;
-  --text-color: #3D405B;
-  --button-hover: #FFB347;
-}
-```
-
-### Navigation
-
-Players navigate between locations using direction buttons:
-
-```jsx
-// Navigation component
-const Navigation = () => {
-  const { gameState, updateGameState, formatLocationName, playSound } = useGameContext();
-  const currentLocation = gameState.currentLocation;
-  const connections = gameState.locations[currentLocation].connections;
-  
-  const handleMove = (location) => {
-    // Play move sound
-    playSound('move');
-    
-    // Update game state
-    updateGameState({
-      currentLocation: location,
-      moves: gameState.moves + 1
-    });
-  };
-  
-  return (
-    <div className="navigation">
-      <h3>Where to go?</h3>
-      <div className="direction-buttons">
-        {connections.map((connection, index) => (
-          <button
-            key={index}
-            className="direction-button"
-            onClick={() => handleMove(connection)}
-          >
-            {formatLocationName(connection)}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-```
-
-### Feedback System
-
-The game provides immediate feedback for puzzle answers:
-
-```jsx
-// Check answer
-const checkAnswer = async (answer) => {
-  setSelectedAnswer(answer);
-  
-  if (answer === gameState.currentPuzzle.answer) {
-    // Play correct sound
-    playSound('correct');
-    
-    setFeedback({ correct: true, message: "That's correct! Great job!" });
-    
-    // Update progress...
-    
-  } else {
-    // Play wrong sound
-    playSound('wrong');
-    
-    setFeedback({ correct: false, message: "That's not quite right. Try again!" });
-    
-    // Update moves...
-  }
-};
-```
-
-Visual feedback is enhanced with CSS animations:
-
-```css
-.puzzle-option.correct {
-  background-color: #4CAF50;
-  animation: pulse 0.5s;
-}
-
-.puzzle-option.incorrect {
-  background-color: #F44336;
-  animation: shake 0.5s;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-```
-
-### Hint System
-
-Players can get hints for puzzles:
-
-```jsx
-// Get hint
-const handleGetHint = () => {
-  playSound('hint');
-  
-  updateGameState({
-    hintsUsed: gameState.hintsUsed + 1,
-    moves: gameState.moves + 1
-  });
-  
-  // Generate hint based on current puzzle type
-  const puzzle = gameState.currentPuzzle;
-  let hintMessage = "";
-  
-  if (puzzle.question.includes("letter")) {
-    hintMessage = `Think about the alphabet: A, B, C, D, E, F...`;
-  } else if (puzzle.question.includes("number")) {
-    hintMessage = `Count carefully: 1, 2, 3, 4, 5...`;
-  } else if (puzzle.question.includes("+")) {
-    hintMessage = `Try counting on your fingers!`;
-  }
-  
-  // Show hint message
-  setMessage(`Hint: ${hintMessage}`);
-};
-```
-
-## Backend Integration
-
-### Firebase Setup
-
-To use Firebase with the project:
-
-1. Create a Firebase project at [firebase.google.com](https://firebase.google.com)
-2. Enable Authentication and Firestore Database
-3. Update the Firebase configuration in `src/firebase.js`:
-
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-```
-
-### Database Schema
-
-#### Users Collection
-
-```
-users/
-  [userId]/
-    name: string
-    email: string (optional)
-    isGuest: boolean
-    createdAt: timestamp
-    progress/
-      totalPuzzlesSolved: number
-      alphabetPuzzlesSolved: number
-      numberPuzzlesSolved: number
-      additionPuzzlesSolved: number
-      hintsUsed: number
-      lastPlayed: timestamp
-    badges/
-      []/
-        type: string (alphabet, number, addition, total)
-        level: string (bronze, silver, gold)
-        name: string
-        icon: string
-```
-
-#### Puzzles Collection
-
-```
-puzzles/
-  [puzzleId]/
-    type: string (alphabet, numbers, addition)
-    difficulty: string (easy, medium, hard)
-    question: string
-    answer: string
-    options: array of strings
-```
-
-### Data Access
-
-Firebase services are abstracted through service functions:
-
-```jsx
-// Fetch puzzles by type and difficulty
-export const fetchPuzzles = async (type, difficulty = 'easy', count = 5) => {
-  try {
-    const puzzlesRef = collection(db, 'puzzles');
-    const q = query(
-      puzzlesRef,
-      where('type', '==', type),
-      where('difficulty', '==', difficulty),
-      limit(count)
-    );
-    
-    const querySnapshot = await getDocs(q);
-    const puzzles = [];
-    
-    querySnapshot.forEach((doc) => {
-      puzzles.push({ id: doc.id, ...doc.data() });
-    });
-    
-    return puzzles;
-  } catch (error) {
-    console.error("Error fetching puzzles:", error);
-    return [];
-  }
-};
-```
-
-## Deployment Guide
-
-### Prerequisites
-
-- Node.js and npm installed
-- Firebase CLI installed (`npm install -g firebase-tools`)
-- Firebase project created
-
-### Deploying the React SPA
-
-1. Build the React application:
-
-```bash
-cd finding-tilly-react
-npm run build
-```
-
-2. Login to Firebase:
-
-```bash
-firebase login
-```
-
-3. Initialize Firebase in the project:
-
-```bash
-firebase init
-```
-
-4. Select Hosting and configure:
-   - Select your Firebase project
-   - Specify `build` as the public directory
-   - Configure as a single-page app
-   - Don't overwrite `index.html`
-
-5. Deploy to Firebase:
-
-```bash
-firebase deploy
-```
-
-### Adding Media Files
-
-Before deploying, add the required media files:
-
-1. **Images** in `public/images/`:
-   - `home.png`
-   - `garden.png`
-   - `kitchen.png`
-   - `bedroom.png`
-   - `playground.png`
-   - `dining_room.png`
-   - `closet.png`
-   - `treehouse.png`
-   - `tilly_found.png`
-   - `background.png`
-
-2. **Sounds** in `public/sounds/`:
-   - `move.mp3`
-   - `pickup.mp3` (used for correct answers)
-   - `hint.mp3`
-   - `win.mp3`
-   - `wrong.mp3` (for incorrect answers)
-
-## Future Enhancements
-
-### Short-term Improvements
-
-1. **Expanded Puzzle Library**
-   - Add more varied questions at different difficulty levels
-   - Create puzzles for specific age groups
-
-2. **Adaptive Difficulty**
-   - Adjust puzzle difficulty based on player performance
-   - Gradually introduce more challenging concepts
-
-3. **Parent Dashboard**
-   - Create an interface for parents to monitor progress
-   - Provide insights into strengths and areas for improvement
+The game tracks:
+
+- Number of puzzles solved
+- Consecutive correct answers (streak)
+- Hints used
+- Total moves made
+- Time taken to complete the game
+
+### Reward System
+
+To maintain engagement, the game includes:
+
+1. **Immediate Feedback**: Visual and audio feedback for correct/incorrect answers
+2. **Streak Counter**: Recognition for consecutive correct answers
+3. **Bonus Questions**: Extra challenges for quick learners
+4. **Celebration Effects**: Confetti and animations when Tilly is found
+5. **Printable Certificate**: Personalized achievement certificate
+
+## Educational Design Principles
+
+### Scaffolded Learning
+
+The game implements scaffolded learning through:
+
+1. **Skill Levels**: Content difficulty adapts to the child's age and ability
+2. **Visual Aids**: Optional helpers that can be shown/hidden as needed
+3. **Hint System**: Additional support when children struggle with puzzles
+
+### Multimodal Learning
+
+The game supports different learning styles through:
+
+1. **Visual Learning**: Images, animations, and visual representations
+2. **Interactive Learning**: Hands-on puzzle solving and navigation
+3. **Textual Learning**: Written questions and instructions
+
+### Positive Reinforcement
+
+The game uses positive reinforcement through:
+
+1. **Encouraging Feedback**: Supportive messages for both correct and incorrect answers
+2. **Progressive Challenges**: Gradually increasing difficulty based on success
+3. **Celebration of Achievements**: Special effects and rewards for accomplishments
+
+## Implementation Details
+
+### Puzzle Generation
+
+Puzzles are generated from a library of questions organized by:
+
+1. **Type**: Alphabet, numbers, or addition
+2. **Difficulty**: Explorer, adventurer, or champion level
+3. **Format**: Question structure and answer options
+
+The `gameService.js` file handles puzzle selection, ensuring appropriate difficulty and preventing repetition.
+
+### Location Management
+
+Locations are defined in the GameContext with:
+
+1. **Name**: Identifier for the location
+2. **Description**: Text description of the location
+3. **PuzzleType**: The type of puzzle associated with the location
+4. **Exits**: Array of connected locations
+
+### Progress Management
+
+Game progress is tracked in the GameContext state:
+
+1. **puzzlesSolved**: Counter for completed puzzles
+2. **moves**: Counter for navigation actions
+3. **hintsUsed**: Counter for hint button usage
+4. **streak**: Counter for consecutive correct answers
+
+### Win Condition
+
+The primary win condition is solving 5 puzzles, which triggers:
+
+1. Redirection to the WinScreen
+2. Display of game statistics
+3. Celebration effects
+4. Option to view/print a certificate
+
+## User Experience Considerations
+
+### Child-Friendly Interface
+
+The interface is designed specifically for children with:
+
+1. **Large, Clear Buttons**: Easy to click for developing motor skills
+2. **Simple Navigation**: Intuitive movement between locations
+3. **Bright Colors**: Engaging visual palette
+4. **Emoji-Based Visuals**: Familiar and friendly imagery
+5. **Minimal Text**: Reduced reading requirements for younger players
+
+### Accessibility
+
+The game implements accessibility features:
+
+1. **Color Contrast**: Ensuring text is readable
+2. **Simple Language**: Age-appropriate instructions
+3. **Visual Aids**: Support for different learning needs
+4. **Keyboard Navigation**: Alternative to mouse interaction
+
+### Responsive Design
+
+The interface adapts to different screen sizes:
+
+1. **Mobile-Friendly Layout**: Reorganizes for smaller screens
+2. **Touch-Optimized Controls**: Suitable for tablets and touchscreens
+3. **Flexible Component Sizing**: Adjusts to available space
+
+## Testing Strategy
+
+### User Testing
+
+The game was tested with:
+
+1. **Target Age Groups**: Children ages 3-10
+2. **Educational Professionals**: Teachers and early childhood educators
+3. **Parents**: For usability and engagement feedback
+
+### Technical Testing
+
+Technical testing included:
+
+1. **Component Testing**: Verifying individual component functionality
+2. **Integration Testing**: Ensuring components work together correctly
+3. **Cross-Browser Testing**: Compatibility across major browsers
+4. **Responsive Testing**: Functionality on different devices and screen sizes
+
+## Deployment
+
+The application can be deployed using:
+
+1. **Static Hosting**: Services like Netlify, Vercel, or GitHub Pages
+2. **Firebase Hosting**: For integrated authentication and database
+3. **Traditional Web Hosting**: Using the built production files
+
+## Future Development Roadmap
+
+### Short-term Enhancements
+
+1. **Audio Narration**: Voice instructions for non-readers
+2. **Additional Puzzle Types**: Subtraction, shape recognition, etc.
+3. **Parent Dashboard**: Monitor child's progress and learning areas
 
 ### Long-term Vision
 
-1. **Additional Learning Areas**
-   - Expand to include shape recognition
-   - Add simple word reading puzzles
-   - Include basic subtraction
+1. **Multiplayer Mode**: Collaborative puzzle solving
+2. **Customizable Characters**: Personalized game experience
+3. **Expanded Storylines**: Multiple adventures with different educational themes
+4. **Mobile App Version**: Native mobile experience
 
-2. **Multiplayer Features**
-   - Allow children to play together
-   - Create classroom mode for educational settings
+## Conclusion
 
-3. **Customization Options**
-   - Allow parents/teachers to create custom puzzles
-   - Enable theme customization
+Finding Tilly represents a thoughtful blend of education and entertainment, designed to make learning engaging for young children. By combining storytelling, exploration, and age-appropriate puzzles, the game creates an immersive learning environment that adapts to different skill levels and learning styles.
 
-4. **Mobile App Version**
-   - Convert to React Native for native mobile experience
-   - Add offline mode with sync capabilities
-
-## Resources and References
-
-### Development Resources
-
-- [React Documentation](https://reactjs.org/docs/getting-started.html)
-- [Firebase Documentation](https://firebase.google.com/docs)
-- [React Router Documentation](https://reactrouter.com/docs/en/v6)
-
-### Educational Resources
-
-- [Early Childhood Education Guidelines](https://www.naeyc.org/resources/topics/dap/position-statement)
-- [Kindergarten Learning Standards](https://www.ed.gov/early-learning/resources)
-
-### Media Resources
-
-- Free images: [Freepik](https://www.freepik.com), [Pixabay](https://pixabay.com)
-- Free sounds: [FreeSound](https://freesound.org)
-
-### Project Files
-
-- [GitHub Repository](#) (To be created)
-- [Live Demo](#) (To be deployed)
+The modular architecture ensures the game can be easily extended with new features, puzzle types, and educational content, making it a versatile platform for ongoing development and enhancement.
