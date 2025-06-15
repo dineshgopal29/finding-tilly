@@ -1,13 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../contexts/GameContext';
+import { useAuth } from '../contexts/AuthContext';
 import LocationDisplay from './LocationDisplay';
 import PuzzleDisplay from './PuzzleDisplay';
 import '../styles/GameScreen.css';
 
 const GameScreen = () => {
   const { gameState, updateGameState, playSound } = useGameContext();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
+  
+  // State for popups
+  const [showHintPopup, setShowHintPopup] = useState(false);
+  const [showLookAroundPopup, setShowLookAroundPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState('');
+  const [popupTitle, setPopupTitle] = useState('');
   
   // Redirect to welcome screen if game not started
   useEffect(() => {
@@ -41,14 +49,46 @@ const GameScreen = () => {
       hintsUsed: (gameState.hintsUsed || 0) + 1
     });
     
-    // Show hint logic would go here
-    alert("Look carefully at the puzzle. What comes next in the sequence?");
+    // Set popup content based on current puzzle type
+    const puzzleType = gameState.locations[gameState.currentLocation].puzzleType;
+    let hintText = "Look carefully at the puzzle. What comes next in the sequence?";
+    
+    if (puzzleType === 'alphabet') {
+      hintText = "Think about the alphabet order. Which letter comes next in the sequence?";
+    } else if (puzzleType === 'numbers') {
+      hintText = "Look at the pattern of numbers. What number would continue the pattern?";
+    } else if (puzzleType === 'addition') {
+      hintText = "Try counting the total objects or using your fingers to add the numbers together.";
+    }
+    
+    setPopupTitle('Hint');
+    setPopupContent(hintText);
+    setShowHintPopup(true);
   };
   
   // Handle looking around the current location
   const handleLookAround = () => {
     const location = gameState.locations[gameState.currentLocation];
-    alert(`${location.name}: ${location.description}`);
+    setPopupTitle(`${location.name}`);
+    setPopupContent(location.description);
+    setShowLookAroundPopup(true);
+  };
+  
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      updateGameState({
+        gameStarted: false,
+        playerName: '',
+        puzzlesSolved: 0,
+        moves: 0,
+        hintsUsed: 0
+      });
+      navigate('/');
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
   
   // Format location name (replace underscores with spaces and capitalize)
@@ -57,6 +97,12 @@ const GameScreen = () => {
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  };
+  
+  // Close popup
+  const closePopup = () => {
+    setShowHintPopup(false);
+    setShowLookAroundPopup(false);
   };
   
   if (!gameState.gameStarted) {
@@ -76,6 +122,9 @@ const GameScreen = () => {
             {gameState.skillLevel === 'adventurer' && <span>🌟 Adventurer</span>}
             {gameState.skillLevel === 'champion' && <span>🏆 Champion</span>}
           </span>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </header>
       
@@ -122,6 +171,49 @@ const GameScreen = () => {
           </div>
         </div>
       </div>
+      
+      {/* Hint Popup */}
+      {showHintPopup && (
+        <div className="popup-overlay">
+          <div className="popup-container hint-popup">
+            <div className="popup-header">
+              <h3>{popupTitle}</h3>
+              <button className="close-button" onClick={closePopup}>×</button>
+            </div>
+            <div className="popup-content">
+              <p>{popupContent}</p>
+              <div className="hint-icon">💡</div>
+            </div>
+            <button className="popup-button" onClick={closePopup}>Got it!</button>
+          </div>
+        </div>
+      )}
+      
+      {/* Look Around Popup */}
+      {showLookAroundPopup && (
+        <div className="popup-overlay">
+          <div className="popup-container look-around-popup">
+            <div className="popup-header">
+              <h3>{popupTitle}</h3>
+              <button className="close-button" onClick={closePopup}>×</button>
+            </div>
+            <div className="popup-content">
+              <p>{popupContent}</p>
+              <div className="location-emoji">
+                {gameState.currentLocation === 'home' && '🏠'}
+                {gameState.currentLocation === 'garden' && '🌷'}
+                {gameState.currentLocation === 'kitchen' && '🍳'}
+                {gameState.currentLocation === 'bedroom' && '🛏️'}
+                {gameState.currentLocation === 'playground' && '🎢'}
+                {gameState.currentLocation === 'dining_room' && '🍽️'}
+                {gameState.currentLocation === 'closet' && '👚'}
+                {gameState.currentLocation === 'treehouse' && '🌳'}
+              </div>
+            </div>
+            <button className="popup-button" onClick={closePopup}>Continue</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
