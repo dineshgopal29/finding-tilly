@@ -1,0 +1,146 @@
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.game-header h1 {
+  color: var(--accent-color);
+  font-size: 2rem;
+  margin: 0;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.player-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.skill-level {
+  background-color: #E3F2FD;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.game-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.location-section, .puzzle-section {
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.location-section h2 {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.location-actions, .puzzle-actions {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.look-button, .hint-button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.look-button:hover, .hint-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navigation {
+  margin-top: 20px;
+}
+
+.navigation h3 {
+  color: var(--text-color);
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.navigation-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .game-content {
+    flex-direction: row;
+  }
+  
+  .location-section, .puzzle-section {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .game-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .navigation-buttons {
+    flex-direction: column;
+  }
+  
+  .nav-button {
+    width: 100%;
+  }
+}

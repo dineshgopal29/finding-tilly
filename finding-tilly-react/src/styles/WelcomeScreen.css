@@ -1,0 +1,177 @@
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.game-title {
+  font-size: 3rem;
+  color: var(--accent-color);
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  animation: bounce 1s;
+}
+
+.welcome-content {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  animation: fadeIn 1s;
+}
+
+.welcome-message {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.start-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.name-input {
+  padding: 12px 15px;
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(255, 90, 95, 0.4);
+}
+
+.error-message {
+  color: var(--accent-color);
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.skill-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.skill-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 15px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 120px;
+}
+
+.skill-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.skill-button.selected {
+  border-color: var(--primary-color);
+  background-color: #FFF8E1;
+  box-shadow: 0 5px 15px rgba(255, 158, 68, 0.2);
+}
+
+.skill-icon {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.skill-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.skill-age {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.start-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.start-button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-20px); }
+  60% { transform: translateY(-10px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .game-title {
+    font-size: 2.5rem;
+  }
+  
+  .welcome-content {
+    padding: 20px;
+  }
+  
+  .welcome-message {
+    font-size: 1.1rem;
+  }
+  
+  .skill-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .skill-button {
+    width: 80%;
+    max-width: 200px;
+  }
+}
