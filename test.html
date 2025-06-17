@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding Tilly - Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .big-button {
+            background: #FF9E44;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .big-button:hover {
+            background: #FFB347;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Finding Tilly</h1>
+        <p>Oh no! Tilly is hiding somewhere! Solve puzzles to find her!</p>
+        
+        <div>
+            <label for="player-name">What's your name, brave explorer?</label><br>
+            <input type="text" id="player-name" placeholder="Enter your name">
+            <button class="big-button" onclick="startGame()">Start Adventure!</button>
+        </div>
+        
+        <div id="game-area" style="display: none; margin-top: 20px;">
+            <h2>Welcome to the adventure!</h2>
+            <p>The game is working! 🎉</p>
+            <p>This is a simplified test version to verify everything loads correctly.</p>
+        </div>
+    </div>
+
+    <script>
+        function startGame() {
+            const name = document.getElementById('player-name').value;
+            if (name.trim()) {
+                document.getElementById('game-area').style.display = 'block';
+                document.querySelector('h2').textContent = `Welcome ${name}!`;
+            } else {
+                alert('Please enter your name first!');
+            }
+        }
+    </script>
+</body>
+</html>

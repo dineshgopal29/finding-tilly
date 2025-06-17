@@ -1,127 +1,100 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useGameContext } from '../contexts/GameContext';
+import React, { useState, useEffect } from 'react';
+import { mockDb } from '../services/mockFirebaseService';
+import { formatDifficultyName } from '../services/gameService';
 import '../styles/LeaderboardScreen.css';
 
-const LeaderboardScreen = () => {
+const LeaderboardScreen = ({ currentUser, onReturn }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const { gameState } = useGameContext();
-  
+  const [error, setError] = useState('');
+
+  // Fetch leaderboard data on component mount
   useEffect(() => {
-    const getLeaderboard = async () => {
+    const fetchData = async () => {
       try {
-        // Sample leaderboard data
-        const sampleData = [
-          {
-            id: 'user1',
-            name: 'Alex',
-            puzzlesSolved: 15,
-            badges: [{type: 'alphabet', level: 'gold', name: 'Alphabet Champion', icon: '🏆'}]
-          },
-          {
-            id: 'user2',
-            name: 'Sam',
-            puzzlesSolved: 12,
-            badges: [{type: 'number', level: 'silver', name: 'Number Master', icon: '📊'}]
-          },
-          {
-            id: 'user3',
-            name: 'Jordan',
-            puzzlesSolved: 8,
-            badges: [{type: 'addition', level: 'bronze', name: 'Addition Explorer', icon: '➕'}]
-          }
-        ];
-        
-        // Add current player to leaderboard
-        const currentPlayer = {
-          id: 'current-player',
-          name: gameState.playerName || 'You',
-          puzzlesSolved: gameState.puzzlesSolved || 0,
-          badges: []
-        };
-        
-        // Add badges based on puzzles solved
-        if (gameState.puzzlesSolved >= 5) {
-          currentPlayer.badges.push({
-            type: 'total', 
-            level: 'gold', 
-            name: 'Found Tilly!', 
-            icon: '🐱'
-          });
-        }
-        
-        // Add current player to data
-        sampleData.push(currentPlayer);
-        
-        // Sort by puzzles solved
-        const sortedData = sampleData.sort((a, b) => b.puzzlesSolved - a.puzzlesSolved);
-        
-        setLeaderboardData(sortedData);
-      } catch (error) {
-        console.error("Error fetching leaderboard:", error);
+        setLoading(true);
+        const data = await mockDb.getLeaderboard();
+        setLeaderboardData(data);
+        setError('');
+      } catch (err) {
+        console.error('Error fetching leaderboard:', err);
+        setError('Failed to load leaderboard data. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
+
+    fetchData();
+  }, []);
+
+  // Format date for display
+  const formatDate = (timestamp) => {
+    if (!timestamp) return 'N/A';
     
-    getLeaderboard();
-  }, [gameState.playerName, gameState.puzzlesSolved]);
-  
-  const handleBackToGame = () => {
-    navigate('/game');
+    try {
+      const date = timestamp instanceof Date 
+        ? timestamp 
+        : timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      
+      return date.toLocaleDateString();
+    } catch (err) {
+      return 'N/A';
+    }
   };
-  
-  if (loading) {
-    return (
-      <div className="leaderboard-screen">
-        <h2>Top Explorers</h2>
-        <div className="loading">Loading leaderboard...</div>
-      </div>
-    );
-  }
-  
+
   return (
     <div className="leaderboard-screen">
-      <h2>Top Explorers</h2>
-      
-      {leaderboardData.length === 0 ? (
-        <div className="no-data">No leaderboard data available yet. Be the first!</div>
-      ) : (
-        <div className="leaderboard-list">
-          {leaderboardData.map((entry, index) => {
-            const isCurrentPlayer = entry.name === (gameState.playerName || 'You') || entry.id === 'current-player';
-            
-            return (
-              <div 
-                key={index} 
-                className={`leaderboard-entry ${isCurrentPlayer ? 'current-player' : ''}`}
-              >
-                <div className="rank">{index + 1}</div>
-                <div className="player-name">
-                  {entry.name} {isCurrentPlayer && <span className="you-indicator">(You)</span>}
-                </div>
-                <div className="puzzles-solved">{entry.puzzlesSolved} puzzles</div>
-                <div className="badges">
-                  {entry.badges && entry.badges.map((badge, i) => (
-                    <div key={i} className={`badge ${badge.type}`} title={badge.name}>
-                      {badge.icon}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+      <div className="leaderboard-container">
+        <h1>Finding Tilly Leaderboard</h1>
+        
+        {loading ? (
+          <div className="loading">Loading leaderboard data...</div>
+        ) : error ? (
+          <div className="error-message">{error}</div>
+        ) : (
+          <div className="leaderboard-table-container">
+            <table className="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Level</th>
+                  <th>Puzzles</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboardData.length > 0 ? (
+                  leaderboardData.map((entry, index) => (
+                    <tr 
+                      key={entry.id} 
+                      className={currentUser && entry.id === currentUser.uid ? 'current-user' : ''}
+                    >
+                      <td>{index + 1}</td>
+                      <td>{entry.displayName}</td>
+                      <td>{formatDifficultyName(entry.skillLevel)}</td>
+                      <td>{entry.puzzlesSolved}</td>
+                      <td>{formatDate(entry.lastPlayed)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="no-data">
+                      No leaderboard data available yet. Be the first to play!
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        <div className="leaderboard-buttons">
+          <button className="primary-button" onClick={onReturn}>
+            Back to Game
+          </button>
         </div>
-      )}
-      
-      <button 
-        className="big-button"
-        onClick={handleBackToGame}
-      >
-        Back to Game
-      </button>
+      </div>
     </div>
   );
 };

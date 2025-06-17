@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Finding Tilly Game</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .btn { 
+            background: #FF6B6B; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 10px;
+        }
+        .btn:hover { background: #ff5252; }
+        input { 
+            padding: 10px; 
+            font-size: 16px; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            margin: 10px; 
+        }
+        .location { 
+            background: #f0f0f0; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 15px 0; 
+        }
+        .emoji { font-size: 3em; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Welcome Screen -->
+        <div id="welcome" class="screen active">
+            <h1>🔍 Finding Tilly</h1>
+            <div class="emoji">🐱</div>
+            <p>Tilly the cat is hiding! Can you find her?</p>
+            <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+            <br>
+            <button class="btn" onclick="startGame()">Start Game</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game" class="screen">
+            <h2>Finding Tilly</h2>
+            <div id="stats">Player: <span id="nameDisplay"></span> | Moves: <span id="moveCount">0</span></div>
+            
+            <div class="location">
+                <div class="emoji" id="locationEmoji">🏠</div>
+                <div id="locationDesc">You are at home. Where should you look for Tilly?</div>
+            </div>
+            
+            <div id="buttons"></div>
+            <div id="message" style="margin: 15px 0; padding: 10px; background: #e3f2fd; border-radius: 5px; display: none;"></div>
+        </div>
+
+        <!-- Win Screen -->
+        <div id="win" class="screen">
+            <h1>🎉 You Found Tilly! 🎉</h1>
+            <div class="emoji">🐱✨</div>
+            <p id="winMessage"></p>
+            <button class="btn" onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let game = {
+            playerName: '',
+            currentLocation: 'home',
+            tillyLocation: '',
+            moves: 0,
+            locations: {
+                home: { name: '🏠 Home', desc: 'You are at home. Tilly is not here.', emoji: '🏠', exits: ['kitchen', 'garden'] },
+                kitchen: { name: '🍽️ Kitchen', desc: 'The kitchen smells good, but no Tilly here.', emoji: '🍽️', exits: ['home', 'basement'] },
+                garden: { name: '🌺 Garden', desc: 'Beautiful garden with flowers. Perfect hiding spots!', emoji: '🌺', exits: ['home', 'shed'] },
+                basement: { name: '🕳️ Basement', desc: 'Dark and cool basement. Tilly loves dark places!', emoji: '🕳️', exits: ['kitchen'] },
+                shed: { name: '🏚️ Shed', desc: 'Old wooden shed with tools. Very mysterious!', emoji: '🏚️', exits: ['garden'] }
+            }
+        };
+
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenName).classList.add('active');
+        }
+
+        function startGame() {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) {
+                alert('Please enter your name!');
+                return;
+            }
+            
+            game.playerName = name;
+            game.moves = 0;
+            game.currentLocation = 'home';
+            
+            // Randomly place Tilly (not at home)
+            const hideouts = ['kitchen', 'garden', 'basement', 'shed'];
+            game.tillyLocation = hideouts[Math.floor(Math.random() * hideouts.length)];
+            
+            document.getElementById('nameDisplay').textContent = name;
+            updateGameDisplay();
+            showScreen('game');
+        }
+
+        function updateGameDisplay() {
+            const loc = game.locations[game.currentLocation];
+            document.getElementById('locationEmoji').textContent = loc.emoji;
+            document.getElementById('locationDesc').textContent = loc.desc;
+            document.getElementById('moveCount').textContent = game.moves;
+            
+            // Create movement buttons
+            const buttonsDiv = document.getElementById('buttons');
+            buttonsDiv.innerHTML = '';
+            
+            loc.exits.forEach(exit => {
+                const exitLoc = game.locations[exit];
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.textContent = `Go to ${exitLoc.name}`;
+                btn.onclick = () => moveToLocation(exit);
+                buttonsDiv.appendChild(btn);
+            });
+        }
+
+        function moveToLocation(location) {
+            game.currentLocation = location;
+            game.moves++;
+            
+            // Check if found Tilly!
+            if (game.currentLocation === game.tillyLocation) {
+                document.getElementById('winMessage').textContent = 
+                    `Amazing! You found Tilly hiding in the ${game.locations[location].name} after ${game.moves} moves!`;
+                showScreen('win');
+                return;
+            }
+            
+            updateGameDisplay();
+            showMessage(`You moved to the ${game.locations[location].name}. Keep searching!`);
+        }
+
+        function showMessage(text) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+
+        function resetGame() {
+            document.getElementById('playerName').value = '';
+            showScreen('welcome');
+        }
+
+        // Initialize
+        console.log('Finding Tilly game loaded successfully!');
+    </script>
+</body>
+</html>

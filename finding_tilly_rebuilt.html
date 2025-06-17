@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding Tilly</title>
+    <style>
+        /* Kid-friendly color scheme */
+        :root {
+            --primary-color: #FF9E44;
+            --secondary-color: #4DCCBD;
+            --accent-color: #FF5A5F;
+            --background-color: #F9F7F3;
+            --text-color: #3D405B;
+            --button-hover: #FFB347;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        #game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .screen {
+            background: var(--background-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .screen.hidden {
+            display: none;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .big-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        .big-button:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        input {
+            padding: 12px;
+            font-size: 16px;
+            border: 3px solid var(--secondary-color);
+            border-radius: 8px;
+            margin: 10px;
+            width: 250px;
+            font-family: inherit;
+        }
+
+        .location-display {
+            background: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .direction-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .direction-button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .direction-button:hover {
+            background: #ff7a7f;
+            transform: scale(1.05);
+        }
+
+        .puzzle-container {
+            background: #fff;
+            border: 3px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .puzzle-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option-button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .option-button:hover {
+            background: #3db5a3;
+            transform: translateX(5px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .stat {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .message {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .win-celebration {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .tilly-emoji {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen">
+            <h1>🔍 Finding Tilly</h1>
+            <p style="font-size: 1.2em; margin: 20px 0;">Oh no! Tilly the cat is hiding somewhere! Solve puzzles and explore to find her!</p>
+            <div>
+                <label for="player-name" style="font-size: 1.1em; font-weight: bold;">What's your name, brave explorer?</label><br>
+                <input type="text" id="player-name" placeholder="Enter your name">
+                <br>
+                <button id="start-button" class="big-button">🚀 Start Adventure!</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <h2>🏠 Finding Tilly</h2>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div>👤 <span id="player-name-display"></span></div>
+                </div>
+                <div class="stat">
+                    <div>👣 Moves: <span id="moves-counter">0</span></div>
+                </div>
+                <div class="stat">
+                    <div>🧩 Puzzles: <span id="puzzles-solved-counter">0</span></div>
+                </div>
+            </div>
+
+            <div class="location-display">
+                <div id="location-description">You are at home. Where could Tilly be hiding?</div>
+            </div>
+            
+            <div id="navigation">
+                <h3>🗺️ Where to go?</h3>
+                <div class="direction-buttons" id="direction-buttons">
+                    <!-- Direction buttons will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div id="puzzle-container" class="puzzle-container" style="display: none;">
+                <h3>🧩 Puzzle Challenge!</h3>
+                <div id="puzzle-question" style="font-size: 1.1em; margin: 15px 0;"></div>
+                <div class="puzzle-options" id="puzzle-options">
+                    <!-- Puzzle options will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <button id="hint-button" class="big-button">💡 Get Hint</button>
+                <button id="look-button" class="big-button">👀 Look Around</button>
+            </div>
+            
+            <div id="message-box"></div>
+        </div>
+
+        <!-- Win Screen -->
+        <div id="win-screen" class="screen hidden">
+            <div class="win-celebration">
+                <h1>🎉 Hooray! You Found Tilly! 🎉</h1>
+            </div>
+            <div class="tilly-emoji">🐱</div>
+            <p style="font-size: 1.3em;">Tilly was hiding and waiting for you to find her!</p>
+            <div id="win-stats" style="font-size: 1.1em; margin: 20px 0;"></div>
+            <button id="play-again-button" class="big-button">🔄 Play Again!</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            playerName: "",
+            currentLocation: "home",
+            tillyLocation: "",
+            moves: 0,
+            currentPuzzle: null,
+            puzzlesSolved: 0,
+            gameWon: false,
+            
+            // Game locations
+            locations: {
+                home: {
+                    name: "🏠 Home",
+                    description: "You are at home. It's cozy but Tilly is nowhere to be seen.",
+                    connections: ["garden", "kitchen"]
+                },
+                garden: {
+                    name: "🌺 Garden", 
+                    description: "The garden is full of flowers and plants. Perfect hiding spots!",
+                    connections: ["home", "shed"]
+                },
+                kitchen: {
+                    name: "🍽️ Kitchen",
+                    description: "The kitchen smells good, but no sign of Tilly here.",
+                    connections: ["home", "basement"]
+                },
+                shed: {
+                    name: "🏚️ Shed",
+                    description: "An old wooden shed with garden tools. Dark and mysterious.",
+                    connections: ["garden"]
+                },
+                basement: {
+                    name: "🕳️ Basement", 
+                    description: "A cool, dark basement. Tilly loves hiding in dark places!",
+                    connections: ["kitchen"]
+                }
+            },
+            
+            // Educational puzzles
+            puzzles: [
+                { question: "What letter comes after A?", answer: "B", options: ["B", "C", "D"] },
+                { question: "What is 2 + 2?", answer: "4", options: ["3", "4", "5"] },
+                { question: "What color do you get when you mix red and yellow?", answer: "Orange", options: ["Orange", "Purple", "Green"] },
+                { question: "How many days are in a week?", answer: "7", options: ["6", "7", "8"] },
+                { question: "What sound does a cat make?", answer: "Meow", options: ["Woof", "Meow", "Moo"] },
+                { question: "What letter comes before D?", answer: "C", options: ["A", "B", "C"] },
+                { question: "What is 5 - 3?", answer: "2", options: ["1", "2", "3"] },
+                { question: "What do bees make?", answer: "Honey", options: ["Honey", "Milk", "Juice"] }
+            ]
+        };
+
+        // Initialize game
+        function initGame() {
+            // Randomly place Tilly in one of the locations (not home)
+            const hideouts = ["garden", "kitchen", "shed", "basement"];
+            gameState.tillyLocation = hideouts[Math.floor(Math.random() * hideouts.length)];
+            
+            document.getElementById('start-button').addEventListener('click', startGame);
+            document.getElementById('hint-button').addEventListener('click', getHint);
+            document.getElementById('look-button').addEventListener('click', lookAround);
+            document.getElementById('play-again-button').addEventListener('click', resetGame);
+        }
+
+        function startGame() {
+            const name = document.getElementById('player-name').value.trim();
+            if (!name) {
+                alert('Please enter your name first!');
+                return;
+            }
+            
+            gameState.playerName = name;
+            document.getElementById('player-name-display').textContent = name;
+            
+            showScreen('game-screen');
+            updateDisplay();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function updateDisplay() {
+            const location = gameState.locations[gameState.currentLocation];
+            document.getElementById('location-description').textContent = location.description;
+            document.getElementById('moves-counter').textContent = gameState.moves;
+            document.getElementById('puzzles-solved-counter').textContent = gameState.puzzlesSolved;
+            
+            // Update direction buttons
+            const buttonsContainer = document.getElementById('direction-buttons');
+            buttonsContainer.innerHTML = '';
+            
+            location.connections.forEach(connectionId => {
+                const connection = gameState.locations[connectionId];
+                const button = document.createElement('button');
+                button.className = 'direction-button';
+                button.textContent = `Go to ${connection.name}`;
+                button.addEventListener('click', () => moveToLocation(connectionId));
+                buttonsContainer.appendChild(button);
+            });
+        }
+
+        function moveToLocation(locationId) {
+            gameState.currentLocation = locationId;
+            gameState.moves++;
+            
+            // Check if Tilly is here
+            if (gameState.currentLocation === gameState.tillyLocation) {
+                winGame();
+                return;
+            }
+            
+            // Show puzzle 30% of the time
+            if (Math.random() < 0.3) {
+                showPuzzle();
+            } else {
+                updateDisplay();
+                showMessage(`You moved to ${gameState.locations[locationId].name}. Keep searching for Tilly!`);
+            }
+        }
+
+        function showPuzzle() {
+            const puzzle = gameState.puzzles[Math.floor(Math.random() * gameState.puzzles.length)];
+            gameState.currentPuzzle = puzzle;
+            
+            document.getElementById('puzzle-question').textContent = puzzle.question;
+            
+            const optionsContainer = document.getElementById('puzzle-options');
+            optionsContainer.innerHTML = '';
+            
+            puzzle.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = option;
+                button.addEventListener('click', () => answerPuzzle(option));
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('puzzle-container').style.display = 'block';
+        }
+
+        function answerPuzzle(answer) {
+            if (answer === gameState.currentPuzzle.answer) {
+                gameState.puzzlesSolved++;
+                showMessage('🎉 Correct! Great job!');
+            } else {
+                showMessage(`❌ Not quite right. The answer was: ${gameState.currentPuzzle.answer}`);
+            }
+            
+            document.getElementById('puzzle-container').style.display = 'none';
+            gameState.currentPuzzle = null;
+            updateDisplay();
+        }
+
+        function getHint() {
+            const hints = [
+                "🐱 Tilly likes quiet, cozy places!",
+                "💡 Try checking all the different rooms!",
+                "🔍 Tilly might be hiding where it's dark and cool!",
+                "🌟 Keep exploring - you're doing great!",
+                "🏠 Have you checked every location thoroughly?"
+            ];
+            
+            const hint = hints[Math.floor(Math.random() * hints.length)];
+            showMessage(hint);
+        }
+
+        function lookAround() {
+            const location = gameState.locations[gameState.currentLocation];
+            const lookMessages = {
+                home: "🏠 You see furniture, family photos, but no Tilly...",
+                garden: "🌺 Beautiful flowers everywhere, butterflies dancing, but where's Tilly?",
+                kitchen: "🍽️ Clean dishes, yummy smells, but Tilly's food bowl is empty...",
+                shed: "🏚️ Garden tools, old boxes, spider webs... could Tilly be hiding here?",
+                basement: "🕳️ It's cool and dark down here... Tilly would love this place!"
+            };
+            
+            showMessage(lookMessages[gameState.currentLocation]);
+        }
+
+        function showMessage(message) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.innerHTML = `<div class="message">${message}</div>`;
+            
+            setTimeout(() => {
+                messageBox.innerHTML = '';
+            }, 4000);
+        }
+
+        function winGame() {
+            gameState.gameWon = true;
+            
+            const stats = `
+                🎯 You found Tilly in ${gameState.moves} moves!<br>
+                🧩 You solved ${gameState.puzzlesSolved} puzzles!<br>
+                ⭐ Excellent detective work!
+            `;
+            
+            document.getElementById('win-stats').innerHTML = stats;
+            showScreen('win-screen');
+        }
+
+        function resetGame() {
+            // Reset game state
+            gameState.playerName = "";
+            gameState.currentLocation = "home";
+            gameState.moves = 0;
+            gameState.puzzlesSolved = 0;
+            gameState.gameWon = false;
+            gameState.currentPuzzle = null;
+            
+            // Randomly place Tilly again
+            const hideouts = ["garden", "kitchen", "shed", "basement"];
+            gameState.tillyLocation = hideouts[Math.floor(Math.random() * hideouts.length)];
+            
+            // Clear inputs
+            document.getElementById('player-name').value = '';
+            document.getElementById('message-box').innerHTML = '';
+            document.getElementById('puzzle-container').style.display = 'none';
+            
+            showScreen('welcome-screen');
+        }
+
+        // Start the game when page loads
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+</html>

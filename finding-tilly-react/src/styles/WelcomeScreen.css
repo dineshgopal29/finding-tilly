@@ -1,177 +1,154 @@
 .welcome-screen {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 30px;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.game-title {
-  font-size: 3rem;
-  color: var(--accent-color);
-  margin-bottom: 30px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  animation: bounce 1s;
-}
-
-.welcome-content {
-  background-color: white;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-  animation: fadeIn 1s;
-}
-
-.welcome-message {
-  font-size: 1.3rem;
-  margin-bottom: 30px;
-  line-height: 1.6;
-}
-
-.start-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.form-group label {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--primary-color);
-}
-
-.name-input {
-  padding: 12px 15px;
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
-  font-size: 1.2rem;
-  width: 100%;
-  max-width: 300px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.name-input:focus {
-  outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 8px rgba(255, 90, 95, 0.4);
-}
-
-.error-message {
-  color: var(--accent-color);
-  font-size: 0.9rem;
-  margin-top: 5px;
-}
-
-.skill-options {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 15px;
-  margin-top: 10px;
-}
-
-.skill-button {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 15px;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 120px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
 }
 
-.skill-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.welcome-container {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  text-align: center;
 }
 
-.skill-button.selected {
-  border-color: var(--primary-color);
-  background-color: #FFF8E1;
-  box-shadow: 0 5px 15px rgba(255, 158, 68, 0.2);
+.welcome-title {
+  color: #FF5A5F;
+  font-size: 3rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.skill-icon {
-  font-size: 2rem;
-  margin-bottom: 5px;
-}
-
-.skill-name {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.skill-age {
-  font-size: 0.8rem;
-  color: #666;
-}
-
-.start-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  padding: 15px 30px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.start-button:hover {
-  background-color: var(--button-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+.welcome-image {
+  font-size: 6rem;
+  margin: 20px 0;
+  animation: bounce 1s infinite;
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-20px); }
-  60% { transform: translateY(-10px); }
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.welcome-description {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: #3D405B;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .game-title {
-    font-size: 2.5rem;
-  }
-  
-  .welcome-content {
-    padding: 20px;
-  }
-  
-  .welcome-message {
-    font-size: 1.1rem;
-  }
-  
-  .skill-options {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .skill-button {
-    width: 80%;
-    max-width: 200px;
-  }
+.input-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-container label {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #3D405B;
+}
+
+.input-container input {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border: 3px solid #4DCCBD;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.difficulty-selector {
+  margin: 30px 0;
+}
+
+.difficulty-selector h3 {
+  color: #4DCCBD;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.difficulty-button {
+  background-color: #e0e0e0;
+  border: 3px solid transparent;
+  border-radius: 15px;
+  padding: 15px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 180px;
+}
+
+.difficulty-button:hover {
+  transform: translateY(-5px);
+}
+
+.difficulty-button.selected {
+  border-color: #FF9E44;
+  background-color: rgba(255, 158, 68, 0.2);
+}
+
+.age-range {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.welcome-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.primary-button, .secondary-button {
+  padding: 12px 25px;
+  font-size: 1.3rem;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.primary-button {
+  background-color: #FF9E44;
+  color: white;
+}
+
+.secondary-button {
+  background-color: #4DCCBD;
+  color: white;
+}
+
+.primary-button:hover, .secondary-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.primary-button:active, .secondary-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding Tilly Game</title>
+</head>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; background: #f0f8ff;">
+    <div id="app">
+        <h1 style="color: #ff6b6b; text-align: center;">🐱 Finding Tilly 🐱</h1>
+        <div id="game-content">
+            <p style="text-align: center; font-size: 18px;">Loading game...</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple game that loads immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameContent = document.getElementById('game-content');
+            
+            gameContent.innerHTML = `
+                <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h2>Welcome to Finding Tilly!</h2>
+                    <p>Tilly the cat is hiding! Can you find her?</p>
+                    <input type="text" id="playerName" placeholder="Enter your name" style="padding: 10px; margin: 10px; font-size: 16px; border: 2px solid #ddd; border-radius: 5px;">
+                    <br>
+                    <button onclick="startGame()" style="padding: 15px 30px; font-size: 18px; background: #ff6b6b; color: white; border: none; border-radius: 8px; cursor: pointer; margin: 10px;">
+                        Start Game
+                    </button>
+                </div>
+            `;
+        });
+
+        function startGame() {
+            const name = document.getElementById('playerName').value;
+            if (!name.trim()) {
+                alert('Please enter your name!');
+                return;
+            }
+            
+            const gameContent = document.getElementById('game-content');
+            gameContent.innerHTML = `
+                <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h2>Hello ${name}! 👋</h2>
+                    <p>🏠 You are at home. Where should you look for Tilly?</p>
+                    <div style="margin: 20px 0;">
+                        <button onclick="searchLocation('kitchen')" style="margin: 5px; padding: 10px 20px; background: #4ecdc4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🍽️ Kitchen
+                        </button>
+                        <button onclick="searchLocation('garden')" style="margin: 5px; padding: 10px 20px; background: #45b7d1; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🌺 Garden
+                        </button>
+                        <button onclick="searchLocation('basement')" style="margin: 5px; padding: 10px 20px; background: #96ceb4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🕳️ Basement
+                        </button>
+                    </div>
+                    <div id="result" style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 5px; display: none;"></div>
+                </div>
+            `;
+        }
+
+        function searchLocation(location) {
+            const result = document.getElementById('result');
+            const locations = {
+                'kitchen': '🍽️ You searched the kitchen but only found cat food. Tilly must be elsewhere!',
+                'garden': '🌺 You looked in the garden among the flowers, but no Tilly here!',
+                'basement': '🎉 SUCCESS! You found Tilly hiding in the basement! She was sleeping behind some old boxes. You win! 🐱'
+            };
+            
+            result.innerHTML = `
+                <p style="font-size: 18px; margin: 0;">${locations[location]}</p>
+                ${location === 'basement' ? '<button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Play Again</button>' : ''}
+            `;
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

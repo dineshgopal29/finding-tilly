@@ -1,39 +1,51 @@
-.location-image-container {
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.location-image-placeholder {
-  width: 100%;
-  height: 300px;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
+.location-display {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  overflow: hidden;
-  position: relative;
+  justify-content: center;
+  padding: 10px;
 }
 
-.location-image-placeholder:hover {
-  transform: scale(1.02);
+.location-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
 }
 
 .location-emoji {
-  font-size: 80px;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 8em;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  width: 100%;
+  height: 200px;
+}
+
+.location-emoji:hover {
+  transform: scale(1.05);
 }
 
 .location-name {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 5px 15px;
-  border-radius: 20px;
+  color: #4DCCBD;
+  font-size: 1.5rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .location-emoji {
+    font-size: 6em;
+    height: 150px;
+  }
 }

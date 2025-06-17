@@ -14,6 +14,16 @@
             <div class="input-container">
                 <label for="player-name">What's your name, brave explorer?</label>
                 <input type="text" id="player-name" placeholder="Enter your name">
+                
+                <div class="difficulty-selector">
+                    <h3>Choose your skill level:</h3>
+                    <div class="difficulty-buttons">
+                        <button id="level-novice" class="difficulty-button selected" data-level="novice">🌱 Novice Explorer<br><span class="age-range">(Ages 3-6)</span></button>
+                        <button id="level-scholar" class="difficulty-button" data-level="scholar">🌟 Curious Scholar<br><span class="age-range">(Ages 7-12)</span></button>
+                        <button id="level-master" class="difficulty-button" data-level="master">🏆 Puzzle Master<br><span class="age-range">(Ages 13+)</span></button>
+                    </div>
+                </div>
+                
                 <button id="start-button" class="big-button">Start Adventure!</button>
             </div>
         </div>
@@ -23,14 +33,25 @@
                 <h2>Finding Tilly</h2>
                 <div id="player-info">
                     <span id="player-name-display"></span>
+                    <span id="level-display"></span>
                     <span id="moves-counter">Moves: 0</span>
-                    <span id="puzzles-solved-counter">Puzzles: 0</span>
+                    <span id="puzzles-solved-counter">Puzzles: 0/5</span>
+                </div>
+                <div id="top-buttons">
+                    <button id="leaderboard-button" class="top-button">Leaderboard</button>
+                    <button id="logout-button" class="top-button">Logout</button>
                 </div>
             </div>
 
             <div id="game-area">
                 <div id="location-image-container">
-                    <img id="location-image" src="images/home.png" alt="Current location">
+                    <div id="location-image" class="location-emoji">🏠</div>
+                    <div id="progress-bar-container">
+                        <div id="progress-bar-label">Puzzle Progress:</div>
+                        <div id="progress-bar-outer">
+                            <div id="progress-bar-inner"></div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div id="game-info">
@@ -60,10 +81,55 @@
         <div id="win-screen" class="screen hidden">
             <h1>Hooray! You Found Tilly!</h1>
             <div id="win-image-container">
-                <img src="images/tilly_found.png" alt="Tilly found!">
+                <div class="tilly-found-emoji">🎉🐱🎉</div>
             </div>
             <div id="win-stats"></div>
-            <button id="play-again-button" class="big-button">Play Again!</button>
+            <div id="certificate">
+                <h2>Certificate of Achievement</h2>
+                <p>This certifies that <span id="certificate-name"></span> has successfully found Tilly by solving puzzles!</p>
+                <div id="certificate-stats"></div>
+                <div class="certificate-footer">
+                    <div class="certificate-date">Date: <span id="certificate-date"></span></div>
+                    <div class="certificate-signature">Tilly the Cat</div>
+                </div>
+            </div>
+            <div id="win-buttons">
+                <button id="play-again-button" class="big-button">Play Again!</button>
+                <button id="print-certificate-button" class="big-button">Print Certificate</button>
+            </div>
+        </div>
+
+        <div id="leaderboard-screen" class="screen hidden">
+            <h1>Leaderboard</h1>
+            <div id="leaderboard-container">
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Level</th>
+                            <th>Puzzles</th>
+                            <th>Moves</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Leaderboard entries will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            <button id="close-leaderboard-button" class="big-button">Back to Game</button>
+        </div>
+
+        <div id="bonus-screen" class="screen hidden">
+            <h1>Bonus Challenge!</h1>
+            <p>Wow! You're doing great! Here's a special bonus puzzle:</p>
+            <div id="bonus-puzzle-container">
+                <div id="bonus-puzzle-question"></div>
+                <div id="bonus-puzzle-options"></div>
+            </div>
+            <div id="bonus-message"></div>
+            <button id="continue-after-bonus-button" class="big-button hidden">Continue Adventure</button>
         </div>
     </div>
 
