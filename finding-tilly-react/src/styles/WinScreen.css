@@ -3,240 +3,173 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 30px;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
+  min-height: 100vh;
+  background-color: #f5f7ff;
+  padding: 20px;
   position: relative;
   overflow: hidden;
-  min-height: 100vh;
 }
 
-.win-screen h1 {
-  color: var(--accent-color);
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  animation: bounce 1s;
-  position: relative;
-  z-index: 2;
+.win-container {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.win-title {
+  color: #ff6b6b;
+  animation: pulse 2s infinite;
 }
 
 .win-image-container {
+  margin: 30px 0;
+}
+
+.tilly-found-emoji {
+  font-size: 5rem;
   margin: 20px 0;
-  max-width: 400px;
-  position: relative;
-  z-index: 2;
 }
 
-.tilly-found {
-  width: 100%;
-  height: 300px;
-  border-radius: 15px;
-  border: 8px solid var(--accent-color);
-  animation: fadeIn 1s;
-  background-color: #FF5A5F;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-.tilly-emoji {
-  font-size: 100px;
-  margin-bottom: 20px;
-  animation: bounce 2s infinite;
-}
-
-.tilly-text {
-  font-size: 32px;
-  font-weight: bold;
+.bounce-animation {
+  animation: bounce 1s infinite alternate;
 }
 
 .win-stats {
-  font-size: 1.5rem;
   margin: 20px 0;
-  padding: 15px;
-  background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 2;
+  font-size: 1.2rem;
+}
+
+.certificate {
+  border: 3px dashed #4dabf7;
+  margin: 30px auto;
+  padding: 20px;
+  max-width: 600px;
+  background-color: #f8f9fa;
+}
+
+.certificate h2 {
+  color: #4dabf7;
+  margin-bottom: 20px;
+}
+
+.certificate-name {
+  font-weight: bold;
+  color: #ff6b6b;
+  font-size: 1.3em;
+}
+
+.certificate-stats {
+  margin: 20px 0;
+}
+
+.certificate-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
 }
 
 .win-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 2;
-}
-
-.big-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  padding: 15px 30px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.big-button:hover {
-  background-color: var(--button-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.secondary-button, .certificate-button {
-  background-color: var(--secondary-color);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  padding: 12px 25px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.secondary-button:hover, .certificate-button:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-}
-
-.certificate-button {
-  background-color: #81B29A;
-}
-
-/* Confetti Animation */
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: #f2d74e;
-  opacity: 0.7;
-  animation: fall linear infinite;
-  z-index: 1;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-100vh) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* Certificate Styles */
-.certificate {
-  background-color: #FFFDF7;
-  border: 5px solid #D4AF37;
-  border-radius: 10px;
-  padding: 30px;
-  margin-top: 20px;
-  max-width: 500px;
-  position: relative;
-  z-index: 2;
-  animation: fadeIn 0.5s;
-}
-
-.certificate-content {
-  text-align: center;
-  position: relative;
-}
-
-.certificate h2 {
-  color: #D4AF37;
-  font-size: 2rem;
-  margin-bottom: 20px;
-  font-family: 'Times New Roman', serif;
-}
-
-.certificate-text {
-  font-size: 1.2rem;
-  margin: 10px 0;
-}
-
-.certificate-name {
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--accent-color);
-  margin: 15px 0;
-  font-family: 'Brush Script MT', cursive;
-}
-
-.certificate-stats {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--primary-color);
-  margin: 15px 0;
-}
-
-.certificate-date {
-  font-size: 1.1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
   margin-top: 20px;
 }
 
-.certificate-seal {
-  font-size: 3rem;
-  color: #D4AF37;
-  margin: 15px 0;
-}
-
-.print-button {
-  background-color: #4CAF50;
+.primary-button {
+  background-color: #4dabf7;
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 8px 15px;
+  padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
-  margin-top: 15px;
+  transition: background-color 0.3s;
+}
+
+.primary-button:hover {
+  background-color: #339af0;
+}
+
+.secondary-button {
+  background-color: #e9ecef;
+  color: #495057;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.secondary-button:hover {
+  background-color: #dee2e6;
+}
+
+/* Confetti styles */
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f00;
+  border-radius: 2px;
+}
+
+/* Animations */
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Print styles */
 @media print {
-  body * {
-    visibility: hidden;
+  .win-screen {
+    background-color: white;
+    height: auto;
   }
-  .certificate, .certificate * {
-    visibility: visible;
+  
+  .win-container {
+    box-shadow: none;
+    padding: 0;
   }
-  .certificate {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  .print-button {
+  
+  .win-buttons, .confetti-container {
     display: none;
   }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-20px); }
-  60% { transform: translateY(-10px); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Responsive adjustments */
-@media (min-width: 768px) {
-  .win-buttons {
-    flex-direction: row;
-    justify-content: center;
+  
+  .certificate {
+    border: 2px solid black;
+    page-break-inside: avoid;
   }
 }
